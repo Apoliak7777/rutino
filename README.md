@@ -33,8 +33,7 @@ Statický web bez buildu a bez závislostí. Beží na GitHub Pages, doména `ru
 
 ## Kontaktná adresa
 
-Všetky `mailto:` odkazy vedú na `apoliak@apoliak.online`. Keď bude existovať schránka na doméne
-rutino.online, stačí jedno nahradenie v `index.html`, `ochrana-udajov.html` a `404.html`.
+Všetky `mailto:` odkazy vedú na `info@rutino.online` (schránka na Hostingeri od 14.09.2026).
 
 ## Lokálny náhľad
 
