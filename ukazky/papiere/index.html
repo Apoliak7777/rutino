@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Papiere do tabuľky: faktúry z PDF do Excelu (ukážka)</title>
+<meta name="description" content="Ukážková toolka: hodíte do nej PDF faktúry, ona z nich vytiahne dodávateľa, čísla, dátumy a sumy do tabuľky. Beží v prehliadači, súbory neopúšťajú váš počítač.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F8F7F4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  color-scheme:light;
+  --bg:#F8F7F4; --surface:#FFFFFF; --surface-2:#EFEDE8;
+  --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74;
+  --line:rgba(21,21,23,.13); --box-line:rgba(21,21,23,.08);
+  --acc:#C2410C; --acc-hover:#A33608; --acc-ink:#FFFFFF;
+  --acc-soft:rgba(194,65,12,.08); --acc-line:rgba(194,65,12,.35);
+  --ok:#1F7A4D; --ok-soft:rgba(31,122,77,.10); --hm:#8A5A00; --hm-soft:rgba(214,146,0,.14); --err:#B3261E; --err-soft:rgba(179,38,30,.10);
+  --shadow:0 1px 2px rgba(21,21,23,.06),0 20px 40px -28px rgba(21,21,23,.35);
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"Manrope","Segoe UI",system-ui,sans-serif;
+  --r:6px;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+input{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:500;margin:0;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.top{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top h1{font-size:1.25rem}
+.top .sub{color:var(--muted);font-size:.86rem}
+.top .spacer{flex:1}
+.back{font-size:.86rem;color:var(--ink-2);text-decoration:none;font-weight:600}
+.back:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:.9rem;white-space:nowrap;text-decoration:none;transition:border-color .2s,background-color .2s}
+.btn:hover{border-color:var(--ink)}
+.btn--acc{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
+.btn--acc:hover{background:var(--acc-hover);border-color:transparent}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.wrap{max-width:1360px;margin-inline:auto;padding:20px}
+.drop{border:2px dashed var(--acc-line);border-radius:8px;background:var(--surface);padding:26px 20px;text-align:center;transition:background-color .2s,border-color .2s}
+.drop.is-over{background:var(--acc-soft);border-color:var(--acc)}
+.drop h2{font-size:1.35rem;margin-bottom:6px}
+.drop p{margin:0 0 14px;color:var(--ink-2)}
+.drop .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.stav{margin:14px 0 0;font-size:.9rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+.stav b{color:var(--ink)}
+.legend{display:inline-flex;gap:12px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.legend .l-ok::before{background:var(--ok)} .legend .l-hm::before{background:var(--hm)} .legend .l-no::before{background:var(--err)}
+.pane{margin-top:16px;background:var(--surface);border:1px solid var(--box-line);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:1480px}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:1px solid var(--ink);white-space:nowrap;background:var(--surface);position:sticky;top:0}
+td{padding:4px 6px;border-bottom:1px solid var(--box-line);vertical-align:middle;font-size:.9rem}
+td.file{font-weight:600;white-space:nowrap;max-width:190px;overflow:hidden;text-overflow:ellipsis}
+td.file small{display:block;font-weight:500;color:var(--muted);font-size:.76rem}
+td input{width:100%;min-width:96px;}
+td:nth-child(2) input{min-width:230px}
+td:nth-child(4) input{min-width:130px}
+td:nth-child(5) input{min-width:120px}
+td:nth-child(12) input{min-width:215px}
+td input{padding:6px 8px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:.9rem}
+td input:hover{border-color:var(--line)}
+td input:focus{outline:none;border-color:var(--acc);background:var(--bg)}
+td.ok input{background:var(--ok-soft)} td.hm input{background:var(--hm-soft)} td.no input{background:var(--err-soft)}
+td.num input{text-align:right;font-variant-numeric:tabular-nums}
+td.x button{border:0;background:transparent;color:var(--muted);font-size:1.1rem;padding:2px 6px;border-radius:4px}
+td.x button:hover{color:var(--err);background:var(--surface-2)}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)}
+.akcie{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
+.akcie .hint{font-size:.84rem;color:var(--muted);flex-basis:100%}
+.pozn{margin-top:22px;padding:14px 16px;border-left:3px solid var(--acc);background:var(--acc-soft);font-size:.92rem;color:var(--ink-2);border-radius:0 var(--r) var(--r) 0}
+.pozn b{color:var(--ink)}
+.ukazka-lista{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:16px;padding:10px 14px;border-left:3px solid var(--acc);background:var(--acc-soft);border-radius:0 var(--r) var(--r) 0;font-size:.9rem;color:var(--ink-2)}
+.ukazka-lista b{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:.9rem;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+.vh{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>Papiere do tabuľky</h1>
+    <div class="sub">ukážková toolka: faktúry z PDF do jednej tabuľky</div>
+  </div>
+  <div class="spacer"></div>
+  <a class="back" href="../../#ukazky">Späť na rutino.online</a>
+</header>
+
+<main class="wrap">
+  <div class="ukazka-lista"><span>Ukážka s tromi vymyslenými faktúrami a 2 vlastnými PDF na skúšku. <b>Vaša toolka číta faktúry bez limitu a exportuje ich do Excelu alebo na import do účtovníctva.</b></span><a class="btn btn--acc" href="mailto:apoliak@apoliak.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino">Chcem ukážku zadarmo</a></div>
+  <div class="drop" id="drop">
+    <h2>Sem hoďte PDF faktúry</h2>
+    <p>Alebo si to najprv vyskúšajte na troch vymyslených faktúrach od troch rôznych dodávateľov.</p>
+    <div class="row">
+      <button class="btn btn--acc" id="ukazka" type="button">Načítať 3 ukážkové faktúry</button>
+      <label class="btn" for="subory">Vybrať vlastné PDF</label>
+      <input class="vh" id="subory" type="file" accept="application/pdf,.pdf" multiple>
+    </div>
+  </div>
+
+  <div class="stav">
+    <span>Spracované: <b id="pocet">0</b> súborov za <b id="cas">0,0 s</b></span>
+    <span class="legend"><span class="l-ok">nájdené podľa označenia</span><span class="l-hm">odhad, skontrolujte</span><span class="l-no">chýba, doplňte</span></span>
+  </div>
+
+  <section class="pane" aria-label="Vytiahnuté údaje">
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Súbor</th><th>Dodávateľ</th><th>IČO</th><th>IČ DPH</th><th>Číslo faktúry</th><th>Var. symbol</th><th>Vystavená</th><th>Splatnosť</th><th>Bez DPH</th><th>DPH</th><th>Celkom</th><th>IBAN</th><th></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="empty" id="empty">Zatiaľ prázdne. Každý súbor sa spracuje priamo vo vašom prehliadači, nikam sa neposiela.</div>
+    </div>
+    <div class="akcie">
+      <button class="btn" id="vymaz" type="button" disabled>Vymazať tabuľku</button>
+      <span class="hint">Export do CSV, kopírovanie do Excelu a import do účtovníctva sú v plnej toolke. Bunky sa dajú prepísať priamo v tabuľke.</span>
+    </div>
+  </section>
+
+  <div class="pozn"><b>Čo pribudne v toolke na mieru:</b> čítanie skenov cez OCR, sledovanie priečinka, do ktorého faktúry ukladáte, a výstup v takom CSV alebo XML, aké vaše účtovníctvo vie naimportovať. Formát si dohodneme pri ukážke.</div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import * as pdfjsLib from "./pdfjs/pdf.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdfjs/pdf.worker.min.mjs";
+
+const $ = (id) => document.getElementById(id);
+const STLPCE = ["dodavatel","ico","icdph","cislo","vs","vystavena","splatnost","bez","dph","celkom","iban"];
+const HLAVICKA = ["Súbor","Dodávateľ","IČO","IČ DPH","Číslo faktúry","Variabilný symbol","Vystavená","Splatnosť","Bez DPH","DPH","Celkom","IBAN","Stav kontroly"];
+let riadky = [];
+
+/* ---------- text z PDF: položky zoskupíme do riadkov podľa výšky ---------- */
+async function textZPdf(data){
+  const pdf = await pdfjsLib.getDocument({data}).promise;
+  const lines = [];
+  for (let p = 1; p <= Math.min(pdf.numPages, 3); p++){
+    const page = await pdf.getPage(p);
+    const tc = await page.getTextContent();
+    const items = tc.items.filter(i => i.str && i.str.trim()).map(i => ({x:i.transform[4], y:Math.round(i.transform[5]), s:i.str}));
+    items.sort((a,b) => b.y - a.y || a.x - b.x);
+    let cur = null;
+    for (const it of items){
+      if (!cur || Math.abs(cur.y - it.y) > 3){ cur = {y:it.y, parts:[]}; lines.push(cur); }
+      cur.parts.push(it);
+    }
+  }
+  return lines.map(l => l.parts.sort((a,b)=>a.x-b.x).map(p=>p.s).join(" ").replace(/\s{2,}/g," ").trim()).filter(Boolean);
+}
+
+/* ---------- vytiahnutie polí ---------- */
+const num = (s) => s ? s.replace(/\s/g,"").replace(/€/g,"").trim() : "";
+const datum = (s) => s ? s.replace(/\s/g,"") : "";
+function hladaj(text, vzory){
+  for (const re of vzory){ const m = text.match(re); if (m) return m[1].trim(); }
+  return "";
+}
+function vytiahni(lines){
+  const text = lines.join("\n");
+  const r = {}; const st = {};
+  const set = (k, v, s) => { r[k] = v || ""; st[k] = v ? s : "no"; };
+
+  // dodávateľ: riadok po označení Dodávateľ, inak prvý riadok s právnou formou, inak prvý riadok
+  let dod = "", dodSt = "hm";
+  const idx = lines.findIndex(l => /^dod[aá]vate[ľl]/i.test(l));
+  if (idx > -1){
+    const rest = lines[idx].replace(/^dod[aá]vate[ľl]\s*:?\s*/i,"").replace(/odberate[ľl].*$/i,"").trim();
+    dod = rest || (lines[idx+1] || "").replace(/odberate[ľl].*$/i,"").trim(); dodSt = "ok";
+  }
+  if (!dod){ const f = lines.find(l => /(s\.\s?r\.\s?o\.|spol\.\s?s\s?r\.\s?o\.|a\.\s?s\.|živnos|s\.r\.o)/i.test(l)); dod = f || lines[0] || ""; dodSt = "hm"; }
+  set("dodavatel", dod.replace(/\s*[·|].*$/,"").trim(), dodSt);
+
+  set("ico", hladaj(text, [/I[ČC]O\s*:?\s*(\d{2}\s?\d{3}\s?\d{3})/i]).replace(/\s/g,""), "ok");
+  set("icdph", hladaj(text, [/I[ČC]\s?DPH\s*:?\s*(SK\s?\d{10})/i, /(SK\d{10})/]).replace(/\s/g,""), "ok");
+  set("cislo", hladaj(text, [/(?:fakt[úu]ra|invoice)\s*(?:[čc]\.|[čc][íi]slo|no\.?|#)\s*:?\s*([A-Z0-9][A-Z0-9\/\-]{2,})/i, /[čc][íi]slo fakt[úu]ry\s*:?\s*([A-Z0-9][A-Z0-9\/\-]{2,})/i]), "ok");
+  set("vs", hladaj(text, [/variabiln[ýy]\s+symbol\s*:?\s*(\d{4,10})/i, /\bVS\s*:?\s*(\d{4,10})/]), "ok");
+  set("vystavena", datum(hladaj(text, [/(?:d[áa]tum\s+vystavenia|vystaven[éáa])\s*:?\s*(\d{1,2}\.\s?\d{1,2}\.\s?\d{4})/i])), "ok");
+  set("splatnost", datum(hladaj(text, [/(?:d[áa]tum\s+splatnosti|splatnos[ťt]|splatn[éáa])\s*:?\s*(\d{1,2}\.\s?\d{1,2}\.\s?\d{4})/i])), "ok");
+  set("bez", num(hladaj(text, [/(?:z[áa]klad(?:\s+DPH)?|spolu\s+bez\s+DPH|bez\s+DPH|cena\s+bez\s+DPH)\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
+  set("dph", num(hladaj(text, [/DPH\s*\d{1,2}\s*%\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
+  set("celkom", num(hladaj(text, [/(?:celkom\s+k\s+[úu]hrade|celkov[áa]\s+suma\s+k\s+[úu]hrade|suma\s+k\s+[úu]hrade|k\s+[úu]hrade|celkom\s+s\s+DPH|spolu\s+s\s+DPH|celkov[áa]\s+suma)\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
+  set("iban", hladaj(text, [/(SK\d{2}(?:\s?\d{4}){5})/]).replace(/\s/g,"").replace(/(.{4})/g,"$1 ").trim(), "ok");
+
+  // neplatca DPH: bez DPH = celkom, DPH = 0, to je odhad
+  if (!r.bez && r.celkom && /nie\s+som\s+platite/i.test(text)){ r.bez = r.celkom; st.bez = "hm"; r.dph = "0,00"; st.dph = "hm"; }
+  // dodávateľ bez IČ DPH je v poriadku, keď je neplatca
+  if (!r.icdph && /nie\s+som\s+platite/i.test(text)){ r.icdph = "neplatca"; st.icdph = "hm"; }
+  return {r, st};
+}
+
+/* ---------- spracovanie súborov ---------- */
+async function spracuj(subory){
+  const t0 = performance.now();
+  for (const f of subory){
+    let lines = [];
+    try { lines = await textZPdf(await f.arrayBuffer()); } catch(e){ lines = []; }
+    const {r, st} = lines.length ? vytiahni(lines) : {r:{}, st:{}};
+    riadky.push({subor:f.name, r, st, bezTextu: !lines.length});
+  }
+  $("cas").textContent = ((performance.now()-t0)/1000).toFixed(1).replace(".",",") + " s";
+  kresli();
+}
+function kresli(){
+  const tb = $("rows"); let html = "";
+  riadky.forEach((row, i) => {
+    html += `<tr><td class="file" title="${row.subor}">${row.subor}${row.bezTextu ? '<small>bez textovej vrstvy, sken potrebuje OCR</small>' : ''}</td>`;
+    STLPCE.forEach(k => {
+      const s = row.st[k] || "no", v = row.r[k] || "";
+      const numc = ["bez","dph","celkom"].includes(k) ? " num" : "";
+      html += `<td class="${s}${numc}"><input value="${v.replace(/"/g,"&quot;")}" data-i="${i}" data-k="${k}" aria-label="${k}"></td>`;
+    });
+    html += `<td class="x"><button type="button" data-x="${i}" aria-label="Odstrániť riadok">×</button></td></tr>`;
+  });
+  tb.innerHTML = html;
+  $("empty").hidden = riadky.length > 0;
+  $("pocet").textContent = riadky.length;
+  $("vymaz").disabled = !riadky.length;
+}
+$("rows").addEventListener("input", (e) => {
+  const i = e.target.closest("[data-i]"); if (!i) return;
+  const row = riadky[+i.dataset.i]; row.r[i.dataset.k] = i.value; row.st[i.dataset.k] = i.value ? "ok" : "no";
+  i.parentElement.className = (i.value ? "ok" : "no") + (["bez","dph","celkom"].includes(i.dataset.k) ? " num" : "");
+});
+$("rows").addEventListener("click", (e) => { const b = e.target.closest("[data-x]"); if (!b) return; riadky.splice(+b.dataset.x,1); kresli(); });
+
+/* ---------- vstupy ---------- */
+let vlastne = 0;
+function vlastneSubory(fs){
+  const volne = Math.max(0, 2 - vlastne);
+  if (!volne){ toast("V ukážke sa dajú vyskúšať 2 vlastné súbory, plná toolka nemá limit"); return; }
+  const vyber = fs.slice(0, volne); vlastne += vyber.length;
+  if (fs.length > vyber.length) toast("V ukážke sa dajú vyskúšať 2 vlastné súbory, spracoval som prvé " + vyber.length);
+  spracuj(vyber);
+}
+$("subory").addEventListener("change", (e) => { vlastneSubory([...e.target.files]); e.target.value = ""; });
+const drop = $("drop");
+["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("is-over"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("is-over"); }));
+drop.addEventListener("drop", (e) => { const fs = [...e.dataTransfer.files].filter(f => /\.pdf$/i.test(f.name)); if (fs.length) vlastneSubory(fs); else toast("Toolka číta PDF súbory"); });
+$("ukazka").addEventListener("click", async () => {
+  $("ukazka").disabled = true;
+  try {
+    const fs = [];
+    for (const n of ["faktura-1.pdf","faktura-2.pdf","faktura-3.pdf"]){
+      const res = await fetch("vzory/" + n); if (!res.ok) throw new Error(n);
+      fs.push(new File([await res.blob()], n, {type:"application/pdf"}));
+    }
+    await spracuj(fs);
+  } catch(e){ toast("Ukážkové faktúry sa nepodarilo načítať"); }
+  $("ukazka").disabled = false;
+});
+
+/* ---------- výstupy ---------- */
+$("vymaz").addEventListener("click", () => { riadky = []; kresli(); });
+
+let tt; function toast(m){ const t = $("toast"); t.textContent = m; t.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("is-on"), 2200); }
+kresli();
+</script>
+</body>
+</html>

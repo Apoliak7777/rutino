@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ponukovač: cenová ponuka za tri minúty (ukážka)</title>
+<meta name="description" content="Ukážková toolka: naklikáte položky z vlastného cenníka, ponuka sa spočíta sama a uloží ako PDF. Beží v prehliadači, bez inštalácie, dáta ostávajú u vás.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F8F7F4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<script>if (location.search.indexOf("vlozene") > -1) document.documentElement.classList.add("vlozene");</script>
+<style>
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  color-scheme:light;
+  --bg:#F8F7F4; --surface:#FFFFFF; --surface-2:#EFEDE8;
+  --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74;
+  --line:rgba(21,21,23,.13); --box-line:rgba(21,21,23,.08);
+  --acc:#C2410C; --acc-hover:#A33608; --acc-ink:#FFFFFF;
+  --acc-soft:rgba(194,65,12,.08); --acc-line:rgba(194,65,12,.35);
+  --ok:#1F7A4D; --err:#B3261E;
+  --shadow:0 1px 2px rgba(21,21,23,.06),0 20px 40px -28px rgba(21,21,23,.35);
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"Manrope","Segoe UI",system-ui,sans-serif;
+  --r:6px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:500;margin:0;letter-spacing:-.01em}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+
+/* ---------- horná lišta ---------- */
+.top{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top h1{font-size:1.25rem}
+.top .sub{color:var(--muted);font-size:.86rem}
+.top .spacer{flex:1}
+.timer{font-variant-numeric:tabular-nums;font-size:.86rem;color:var(--muted);white-space:nowrap}
+.timer b{color:var(--ink);font-weight:700}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:.9rem;white-space:nowrap;text-decoration:none;transition:border-color .2s,background-color .2s}
+.btn:hover{border-color:var(--ink)}
+.btn--acc{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
+.btn--acc:hover{background:var(--acc-hover);border-color:transparent}
+.btn--sm{padding:5px 9px;font-size:.82rem}
+.back{font-size:.86rem;color:var(--ink-2);text-decoration:none;font-weight:600}
+.back:hover{color:var(--ink)}
+
+/* ---------- rozloženie ---------- */
+.app{display:grid;grid-template-columns:minmax(300px,4fr) minmax(0,6fr);gap:20px;padding:20px;max-width:1360px;margin-inline:auto}
+@media (max-width:900px){.app{grid-template-columns:1fr}}
+.pane{background:var(--surface);border:1px solid var(--box-line);border-radius:8px;box-shadow:var(--shadow);min-width:0}
+.pane__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.pane__head h2{font-size:1.15rem}
+.pane__body{padding:14px 16px}
+.hint{font-size:.84rem;color:var(--muted)}
+
+.ukazka-lista{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:10px 14px;border-left:3px solid var(--acc);background:var(--acc-soft);border-radius:0 var(--r) var(--r) 0;font-size:.9rem;color:var(--ink-2)}
+.ukazka-lista b{color:var(--ink)}
+html.vlozene .ukazka-lista{display:none}
+
+/* ---------- cenník ---------- */
+.search{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--bg);margin-bottom:10px}
+.search:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.kat{margin-top:12px}
+.kat h3{font-family:var(--body);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.pol{display:grid;grid-template-columns:minmax(0,1fr) 92px 34px;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--box-line)}
+.pol:first-of-type{border-top:0}
+.pol .n{font-size:.92rem;line-height:1.3}
+.pol .n small{display:block;color:var(--muted);font-size:.78rem}
+.pol input{width:100%;padding:5px 6px;border:1px solid transparent;border-radius:4px;background:transparent;text-align:right;font-variant-numeric:tabular-nums;font-size:.9rem}
+.pol input:hover{border-color:var(--line);background:var(--bg)}
+.pol input:focus{outline:none;border-color:var(--acc);background:var(--bg)}
+.pol .plus{width:34px;height:32px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:1.1rem;line-height:1;display:grid;place-items:center}
+.pol .plus:hover{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
+.cennik-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* ---------- ponuka ---------- */
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px;margin-bottom:12px}
+@media (max-width:560px){.meta{grid-template-columns:1fr 1fr}}
+.f{display:grid;gap:4px}
+.f label{font-size:.76rem;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase}
+.f input,.f textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.f input:focus,.f textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.f--wide{grid-column:1/-1}
+table.lines{width:100%;border-collapse:collapse;margin-top:6px}
+table.lines th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:8px 6px;border-bottom:1px solid var(--ink)}
+table.lines td{padding:8px 6px;border-bottom:1px solid var(--box-line);vertical-align:middle;font-size:.93rem}
+table.lines .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.lines input.q{width:62px;padding:5px 6px;border:1px solid var(--line);border-radius:4px;text-align:right;background:var(--bg)}
+table.lines .x{border:0;background:transparent;color:var(--muted);font-size:1.1rem;padding:2px 6px;border-radius:4px}
+table.lines .x:hover{color:var(--err);background:var(--surface-2)}
+.empty{padding:22px 10px;color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:var(--r);margin-top:8px}
+.sum{margin-top:12px;margin-left:auto;width:min(100%,320px);display:grid;gap:6px}
+.sum div{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.sum .tot{border-top:1px solid var(--ink);padding-top:8px;margin-top:2px;font-family:var(--display);font-size:1.35rem}
+.akcie{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);align-items:center}
+.akcie .hint{flex-basis:100%}
+
+/* ---------- nastavenia firmy ---------- */
+details.nast{margin:0 20px 24px;max-width:1320px}
+details.nast summary{cursor:pointer;font-weight:600;color:var(--ink-2);padding:8px 0;list-style:none;display:flex;align-items:center;gap:8px}
+details.nast summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .2s}
+details.nast[open] summary::before{transform:rotate(45deg)}
+.nast__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 14px;padding:14px 16px;background:var(--surface);border:1px solid var(--box-line);border-radius:8px}
+.nast__grid .f--wide{grid-column:1/-1}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:.9rem;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- vložený režim (rám na hlavnej stránke) ---------- */
+html.vlozene .top,html.vlozene details.nast,html.vlozene .cennik-foot{display:none}
+html.vlozene .app{grid-template-columns:1fr;gap:14px;padding:14px}
+html.vlozene .meta,html.vlozene .akcie .hint,html.vlozene .pane__body>.f{display:none}
+html.vlozene .pane__body{padding:12px 14px}
+html.vlozene body{padding-bottom:58px}
+.vlozene-sum{display:none}
+html.vlozene .vlozene-sum{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:6;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--ink);color:var(--bg);font-size:.92rem}
+html.vlozene .vlozene-sum b{font-family:var(--display);font-size:1.15rem;font-weight:500;font-variant-numeric:tabular-nums}
+html.vlozene .vlozene-sum a{color:inherit;font-weight:600;white-space:nowrap}
+
+/* ---------- dokument na tlač ---------- */
+#doc{display:none}
+@media print{
+  @page{size:A4;margin:16mm 16mm 18mm}
+  body{background:#fff;color:#000;font-size:11pt}
+  .top,.app,details.nast,.toast{display:none !important}
+  #doc{display:block;font-family:"Manrope","Segoe UI",Arial,sans-serif;color:#111}
+  .d-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;border-bottom:2px solid #C2410C;padding-bottom:12px}
+  .d-logo{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-size:18pt}
+  .d-logo i{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:6px;background:#C2410C;color:#fff;font-style:normal;font-weight:700;font-size:16pt}
+  .d-firm{font-size:9pt;color:#444;line-height:1.45;margin-top:6px}
+  .d-title{text-align:right}
+  .d-title h2{font-family:Georgia,serif;font-size:20pt;font-weight:500;margin:0}
+  .d-title p{margin:4px 0 0;font-size:9.5pt;color:#444}
+  .d-cols{display:flex;gap:30px;margin:16px 0}
+  .d-cols>div{flex:1}
+  .d-cols h4{margin:0 0 4px;font-size:8.5pt;text-transform:uppercase;letter-spacing:.06em;color:#777}
+  .d-cols p{margin:0;line-height:1.45}
+  table.d-lines{width:100%;border-collapse:collapse;margin-top:6px;font-size:10pt}
+  table.d-lines th{text-align:left;border-bottom:1.5px solid #111;padding:6px 4px;font-size:8.5pt;text-transform:uppercase;letter-spacing:.05em;color:#555}
+  table.d-lines td{padding:6px 4px;border-bottom:1px solid #ddd;vertical-align:top}
+  table.d-lines .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .d-sum{margin:12px 0 0 auto;width:62mm;font-size:10.5pt}
+  .d-sum div{display:flex;justify-content:space-between;padding:3px 0}
+  .d-sum .tot{border-top:1.5px solid #111;margin-top:4px;padding-top:6px;font-size:13pt;font-family:Georgia,serif}
+  .d-note{margin-top:16px;font-size:9.5pt;color:#333;white-space:pre-wrap}
+  .d-terms{margin-top:14px;font-size:9pt;color:#555;line-height:1.5}
+  .d-sign{margin-top:26px;display:flex;justify-content:space-between;font-size:9.5pt}
+  .d-sign span{border-top:1px solid #999;padding-top:6px;width:60mm;text-align:center}
+  .d-wm{position:fixed;top:36%;left:6%;transform:rotate(-22deg);font-family:Georgia,serif;font-size:80pt;letter-spacing:.08em;color:rgba(194,65,12,.16);pointer-events:none}
+  .d-foot{margin-top:18px;font-size:8.5pt;color:#888}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>Ponukovač</h1>
+    <div class="sub">ukážková toolka pre vymyslenú firmu Chladno a Teplo s. r. o.</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="timer" title="Od otvorenia stránky">otvorené pred <b id="timer">0:00</b></div>
+  <a class="back" href="../../#ukazky">Späť na rutino.online</a>
+</header>
+
+<main class="app">
+  <div class="ukazka-lista"><span>Ukážka pre vymyslenú firmu, po obnovení stránky sa vráti na začiatok. <b>Vaša toolka bude mať váš cenník, logo a údaje firmy.</b></span><a class="btn btn--acc btn--sm" href="mailto:apoliak@apoliak.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino">Chcem ukážku zadarmo</a></div>
+
+  <!-- ================= CENNÍK ================= -->
+  <section class="pane" aria-labelledby="h-cennik">
+    <div class="pane__head">
+      <h2 id="h-cennik">Váš cenník</h2>
+      <span class="hint">ceny bez DPH, dajú sa prepísať</span>
+    </div>
+    <div class="pane__body">
+      <input class="search" id="search" type="search" placeholder="Hľadať položku, napríklad montáž" aria-label="Hľadať v cenníku">
+      <div id="cennik"></div>
+      <div class="cennik-foot">
+        <span class="hint">Zmeny cenníka sa pamätajú v tomto prehliadači.</span>
+        <button class="btn btn--sm" id="reset-cennik" type="button">Obnoviť ukážkový cenník</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PONUKA ================= -->
+  <section class="pane" aria-labelledby="h-ponuka">
+    <div class="pane__head">
+      <h2 id="h-ponuka">Cenová ponuka <span id="cislo-vypis"></span></h2>
+      <button class="btn btn--sm" id="nova" type="button">Nová ponuka</button>
+    </div>
+    <div class="pane__body">
+      <div class="meta">
+        <div class="f f--wide"><label for="z-meno">Zákazník</label><input id="z-meno" value="Peter Novák"></div>
+        <div class="f f--wide"><label for="z-adresa">Adresa montáže</label><input id="z-adresa" value="Hlboká 4, 917 01 Trnava"></div>
+        <div class="f"><label for="z-mail">E-mail zákazníka</label><input id="z-mail" type="email" value="novak@example.com"></div>
+        <div class="f"><label for="datum">Dátum</label><input id="datum" type="date"></div>
+        <div class="f"><label for="platnost">Platnosť do</label><input id="platnost" type="date"></div>
+      </div>
+
+      <table class="lines" aria-label="Položky ponuky">
+        <thead><tr><th>Položka</th><th class="num">Množstvo</th><th class="num">Cena / j.</th><th class="num">Spolu</th><th></th></tr></thead>
+        <tbody id="riadky"></tbody>
+      </table>
+      <div class="empty" id="empty" hidden>Zatiaľ nič. Kliknite na + pri položke v cenníku.</div>
+
+      <div class="sum">
+        <div><span>Bez DPH</span><span id="s-bez">0,00 €</span></div>
+        <div><span>DPH <span id="s-sadzba">23</span> %</span><span id="s-dph">0,00 €</span></div>
+        <div class="tot"><span>Spolu s DPH</span><span id="s-spolu">0,00 €</span></div>
+      </div>
+
+      <div class="f" style="margin-top:12px"><label for="pozn">Poznámka pre zákazníka</label><textarea id="pozn" rows="2">Cena zahŕňa uvedenie do prevádzky a zaškolenie. Záruka na montáž 24 mesiacov.</textarea></div>
+
+      <div class="akcie">
+        <button class="btn btn--acc" id="pdf" type="button">Uložiť ako PDF</button>
+        <a class="btn" id="mail" href="#" target="_blank" rel="noopener">Otvoriť mail zákazníkovi</a>
+        <button class="btn" id="kopiruj" type="button">Kopírovať text ponuky</button>
+        <span class="hint">PDF vzniká cez tlač prehliadača: v okne tlače zvoľte „Uložiť ako PDF“. Nič sa nikam neposiela.</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="vlozene-sum" aria-live="polite"><span>Spolu s DPH <b id="vs-spolu">0,00 €</b></span><a href="#h-ponuka">Pozrieť <span id="vs-pocet">ponuku</span></a></div>
+
+<!-- ================= DOKUMENT NA TLAČ (PDF) ================= -->
+<div id="doc" aria-hidden="true">
+  <div class="d-head">
+    <div>
+      <div class="d-logo"><i id="d-init">C</i><span id="d-firma"></span></div>
+      <div class="d-firm" id="d-firm-info"></div>
+    </div>
+    <div class="d-title">
+      <h2>Cenová ponuka</h2>
+      <p>číslo <b id="d-cislo"></b></p>
+      <p>dátum <span id="d-datum"></span> · platnosť do <span id="d-platnost"></span></p>
+    </div>
+  </div>
+  <div class="d-cols">
+    <div><h4>Zákazník</h4><p id="d-zakaznik"></p></div>
+    <div><h4>Miesto montáže</h4><p id="d-adresa"></p></div>
+    <div><h4>Vypracoval</h4><p id="d-osoba"></p></div>
+  </div>
+  <table class="d-lines">
+    <thead><tr><th>Položka</th><th class="num">Množstvo</th><th class="num">Cena / j.</th><th class="num">Spolu bez DPH</th></tr></thead>
+    <tbody id="d-riadky"></tbody>
+  </table>
+  <div class="d-sum">
+    <div><span>Bez DPH</span><span id="d-bez"></span></div>
+    <div><span>DPH <span id="d-sadzba"></span> %</span><span id="d-dph"></span></div>
+    <div class="tot"><span>Spolu s DPH</span><span id="d-spolu"></span></div>
+  </div>
+  <div class="d-note" id="d-pozn"></div>
+  <div class="d-terms" id="d-terms"></div>
+  <div class="d-sign"><span>za dodávateľa</span><span>za zákazníka</span></div>
+  <div class="d-wm" aria-hidden="true">UKÁŽKA</div>
+  <p class="d-foot">Vyrobené v ukážke na rutino.online. Vaša toolka bude s vaším logom a bez tohto riadku.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ==========================================================
+     UKÁŽKOVÝ CENNÍK. Pri skutočnej toolke sem príde cenník firmy
+     zo súboru alebo z Excelu, položky aj kategórie podľa nich.
+     ========================================================== */
+  var CENNIK_VZOR = [
+    {kat:"Klimatizačné jednotky", pol:[
+      {id:"k26", n:"Nástenná klimatizácia 2,6 kW", s:"do 25 m²", j:"ks", c:690},
+      {id:"k35", n:"Nástenná klimatizácia 3,5 kW", s:"do 35 m²", j:"ks", c:790},
+      {id:"k50", n:"Nástenná klimatizácia 5,0 kW", s:"do 50 m²", j:"ks", c:990},
+      {id:"kmu", n:"Multisplit, vonkajšia jednotka pre 2 miestnosti", s:"2 × 3,5 kW", j:"ks", c:1490}
+    ]},
+    {kat:"Montáž", pol:[
+      {id:"m1", n:"Základná montáž nástennej jednotky", s:"trasa do 3 m, spustenie, zaškolenie", j:"ks", c:290},
+      {id:"m2", n:"Ďalší meter chladiarenskej trasy", s:"medené potrubie, izolácia, kábel", j:"m", c:35},
+      {id:"m3", n:"Prieraz stenou, tehla alebo pórobetón", j:"ks", c:25},
+      {id:"m4", n:"Prieraz stenou, betón", j:"ks", c:55},
+      {id:"m5", n:"Konzola pre vonkajšiu jednotku", j:"ks", c:45},
+      {id:"m6", n:"Plastový žľab na trasu", j:"m", c:12},
+      {id:"m7", n:"Čerpadlo kondenzátu", j:"ks", c:120},
+      {id:"m8", n:"Elektrické pripojenie k ističu", s:"do 10 m", j:"ks", c:85}
+    ]},
+    {kat:"Servis", pol:[
+      {id:"s1", n:"Čistenie a dezinfekcia jednotky", j:"ks", c:59},
+      {id:"s2", n:"Kontrola tesnosti a doplnenie chladiva", s:"do 500 g", j:"ks", c:89},
+      {id:"s3", n:"Servisný výjazd", j:"ks", c:39}
+    ]},
+    {kat:"Doprava a ostatné", pol:[
+      {id:"d1", n:"Doprava", j:"km", c:0.45},
+      {id:"d2", n:"Demontáž starej klimatizácie", j:"ks", c:90},
+      {id:"d3", n:"Likvidácia starej jednotky", j:"ks", c:30}
+    ]}
+  ];
+  var FIRMA_VZOR = {
+    firma:"Chladno a Teplo s. r. o.", ico:"91 827 364", dic:"2020123456", icdph:"SK2020123456",
+    adresa:"Priemyselná 9, 917 01 Trnava", tel:"0900 000 000", mail:"ponuky@example.com",
+    iban:"SK00 0000 0000 0000 0000 0000", osoba:"Martin Chladný", sadzba:23, dni:14
+  };
+  var PREDVOLENE_RIADKY = [ ["k35",1], ["m1",1], ["m2",2], ["m5",1], ["d1",24] ];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var K = "ponukovac-ukazka";
+  var stav = nacitaj();
+
+  function nacitaj(){
+    return { cennik: JSON.parse(JSON.stringify(CENNIK_VZOR)), firma: JSON.parse(JSON.stringify(FIRMA_VZOR)), poradie: 141, riadky: PREDVOLENE_RIADKY.map(function(r){ return {id:r[0], q:r[1]}; }) };
+  }
+  function uloz(){ /* ukážka nič neukladá, vaša toolka si stav pamätá */ }
+
+  var eur = new Intl.NumberFormat("sk-SK", {style:"currency", currency:"EUR"});
+  var fmt = function(n){ return eur.format(n); };
+  var pad = function(n){ return n < 10 ? "0" + n : "" + n; };
+  function iso(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+  function skDatum(isoS){ if(!isoS) return ""; var p = isoS.split("-"); return p[2] + ". " + p[1] + ". " + p[0]; }
+  function najdi(id){ for (var i=0;i<stav.cennik.length;i++){ for (var j=0;j<stav.cennik[i].pol.length;j++){ if (stav.cennik[i].pol[j].id===id) return stav.cennik[i].pol[j]; } } return null; }
+  function cislo(){ return "CP-" + new Date().getFullYear() + "-" + String(stav.poradie).padStart(4,"0"); }
+
+  /* ---------- cenník ---------- */
+  function kresliCennik(){
+    var q = ($("search").value || "").toLowerCase().trim();
+    var html = "";
+    stav.cennik.forEach(function(kat){
+      var pol = kat.pol.filter(function(p){ return !q || (p.n + " " + (p.s||"")).toLowerCase().indexOf(q) > -1; });
+      if (!pol.length) return;
+      html += '<div class="kat"><h3>' + kat.kat + '</h3>';
+      pol.forEach(function(p){
+        html += '<div class="pol"><div class="n">' + p.n + (p.s ? '<small>' + p.s + '</small>' : '') + '</div>' +
+          '<input type="number" step="0.01" min="0" value="' + p.c + '" data-cena="' + p.id + '" aria-label="Cena ' + p.n + ' bez DPH za ' + p.j + '" title="€ / ' + p.j + '">' +
+          '<button type="button" class="plus" data-pridaj="' + p.id + '" aria-label="Pridať ' + p.n + '">+</button></div>';
+      });
+      html += '</div>';
+    });
+    $("cennik").innerHTML = html || '<p class="hint" style="padding:12px 0">Nič také v cenníku nie je.</p>';
+  }
+  $("search").addEventListener("input", kresliCennik);
+  $("cennik").addEventListener("click", function(e){
+    var b = e.target.closest("[data-pridaj]"); if (!b) return;
+    pridaj(b.getAttribute("data-pridaj"));
+  });
+  $("cennik").addEventListener("change", function(e){
+    var i = e.target.closest("[data-cena]"); if (!i) return;
+    var p = najdi(i.getAttribute("data-cena")); if (!p) return;
+    p.c = Math.max(0, parseFloat(i.value) || 0); uloz(); kresliRiadky(); toast("Cena uložená do vášho cenníka");
+  });
+  $("reset-cennik").addEventListener("click", function(){
+    stav.cennik = JSON.parse(JSON.stringify(CENNIK_VZOR)); uloz(); kresliCennik(); kresliRiadky(); toast("Ukážkový cenník obnovený");
+  });
+
+  /* ---------- riadky ponuky ---------- */
+  function pridaj(id){
+    var r = stav.riadky.filter(function(x){ return x.id===id; })[0];
+    if (r) r.q += 1; else stav.riadky.push({id:id, q:1});
+    uloz(); kresliRiadky();
+  }
+  function kresliRiadky(){
+    var tb = $("riadky"), html = "", bez = 0;
+    stav.riadky.forEach(function(r, i){
+      var p = najdi(r.id); if (!p) return;
+      var spolu = p.c * r.q; bez += spolu;
+      html += '<tr><td>' + p.n + (p.s ? ' <span class="hint">(' + p.s + ')</span>' : '') + '</td>' +
+        '<td class="num"><input class="q" type="number" min="0" step="1" value="' + r.q + '" data-q="' + i + '" aria-label="Množstvo"> ' + p.j + '</td>' +
+        '<td class="num">' + fmt(p.c) + '</td><td class="num">' + fmt(spolu) + '</td>' +
+        '<td><button type="button" class="x" data-x="' + i + '" aria-label="Odstrániť riadok">×</button></td></tr>';
+    });
+    tb.innerHTML = html;
+    $("empty").hidden = stav.riadky.length > 0;
+    var sadzba = parseFloat(stav.firma.sadzba) || 0;
+    var dph = Math.round(bez * sadzba) / 100;
+    $("s-bez").textContent = fmt(bez); $("s-dph").textContent = fmt(dph); $("s-spolu").textContent = fmt(bez + dph);
+    $("s-sadzba").textContent = sadzba;
+    $("vs-spolu").textContent = fmt(bez + dph); $("vs-pocet").textContent = stav.riadky.length ? stav.riadky.length + (stav.riadky.length === 1 ? " položku" : stav.riadky.length < 5 ? " položky" : " položiek") : "ponuku";
+    $("cislo-vypis").textContent = cislo();
+    aktualizujMail();
+  }
+  $("riadky").addEventListener("change", function(e){
+    var i = e.target.closest("[data-q]"); if (!i) return;
+    var idx = +i.getAttribute("data-q"); stav.riadky[idx].q = Math.max(0, parseFloat(i.value) || 0);
+    if (stav.riadky[idx].q === 0) stav.riadky.splice(idx,1);
+    uloz(); kresliRiadky();
+  });
+  $("riadky").addEventListener("click", function(e){
+    var b = e.target.closest("[data-x]"); if (!b) return;
+    stav.riadky.splice(+b.getAttribute("data-x"),1); uloz(); kresliRiadky();
+  });
+  $("nova").addEventListener("click", function(){
+    stav.riadky = []; stav.poradie += 1; uloz();
+    $("z-meno").value = ""; $("z-adresa").value = ""; $("z-mail").value = ""; nastavDatumy(); kresliRiadky(); $("z-meno").focus();
+  });
+
+  /* ---------- dátumy ---------- */
+  function nastavDatumy(){
+    var d = new Date(); $("datum").value = iso(d);
+    var p = new Date(d.getTime() + (parseInt(stav.firma.dni,10) || 14) * 86400000); $("platnost").value = iso(p);
+  }
+
+
+  /* ---------- text ponuky, mail, PDF ---------- */
+  function textPonuky(){
+    var f = stav.firma, t = [];
+    t.push("Dobrý deň" + ($("z-meno").value ? ", " + $("z-meno").value : "") + ",");
+    t.push("");
+    t.push("posielam cenovú ponuku č. " + cislo() + " na " + ($("z-adresa").value || "vašu adresu") + ":");
+    t.push("");
+    stav.riadky.forEach(function(r){ var p = najdi(r.id); if (p) t.push("- " + p.n + ": " + r.q + " " + p.j + " × " + fmt(p.c) + " = " + fmt(p.c*r.q)); });
+    t.push("");
+    t.push("Bez DPH: " + $("s-bez").textContent);
+    t.push("DPH " + $("s-sadzba").textContent + " %: " + $("s-dph").textContent);
+    t.push("Spolu s DPH: " + $("s-spolu").textContent);
+    t.push("");
+    if ($("pozn").value.trim()) { t.push($("pozn").value.trim()); t.push(""); }
+    t.push("Ponuka platí do " + skDatum($("platnost").value) + ".");
+    t.push("");
+    t.push("S pozdravom");
+    t.push(f.osoba + ", " + f.firma);
+    t.push(f.tel + " · " + f.mail);
+    return t.join("\n");
+  }
+  function aktualizujMail(){
+    var a = $("mail");
+    a.href = "mailto:" + encodeURIComponent($("z-mail").value || "") + "?subject=" + encodeURIComponent("Cenová ponuka " + cislo() + " od " + stav.firma.firma) + "&body=" + encodeURIComponent(textPonuky());
+  }
+  ["z-meno","z-adresa","z-mail","pozn","platnost"].forEach(function(id){ $(id).addEventListener("input", aktualizujMail); });
+
+  $("kopiruj").addEventListener("click", function(){
+    var t = textPonuky();
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ toast("Text ponuky je v schránke"); }, function(){ zalozne(t); });
+    else zalozne(t);
+    function zalozne(txt){ var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); toast("Text ponuky je v schránke"); }catch(e){ toast("Skopírujte text ručne"); } ta.remove(); }
+  });
+
+  $("pdf").addEventListener("click", function(){
+    var f = stav.firma;
+    $("d-init").textContent = (f.firma || "F").trim().charAt(0).toUpperCase();
+    $("d-firma").textContent = f.firma;
+    $("d-firm-info").innerHTML = [f.adresa, "IČO " + f.ico + " · DIČ " + f.dic + (f.icdph ? " · IČ DPH " + f.icdph : ""), f.tel + " · " + f.mail].join("<br>");
+    $("d-cislo").textContent = cislo();
+    $("d-datum").textContent = skDatum($("datum").value);
+    $("d-platnost").textContent = skDatum($("platnost").value);
+    $("d-zakaznik").innerHTML = ($("z-meno").value || "") + ($("z-mail").value ? "<br>" + $("z-mail").value : "");
+    $("d-adresa").textContent = $("z-adresa").value;
+    $("d-osoba").textContent = f.osoba;
+    var html = "";
+    stav.riadky.forEach(function(r){ var p = najdi(r.id); if (!p) return;
+      html += "<tr><td>" + p.n + (p.s ? "<br><small style='color:#666'>" + p.s + "</small>" : "") + "</td><td class='num'>" + r.q + " " + p.j + "</td><td class='num'>" + fmt(p.c) + "</td><td class='num'>" + fmt(p.c*r.q) + "</td></tr>"; });
+    $("d-riadky").innerHTML = html;
+    $("d-bez").textContent = $("s-bez").textContent; $("d-dph").textContent = $("s-dph").textContent; $("d-spolu").textContent = $("s-spolu").textContent; $("d-sadzba").textContent = $("s-sadzba").textContent;
+    $("d-pozn").textContent = $("pozn").value;
+    $("d-terms").innerHTML = "Ceny sú uvedené v eurách bez DPH, DPH je vyčíslená samostatne. Platba prevodom na účet " + f.iban + ", polovica pri objednávke, zvyšok po montáži. Termín montáže dohodneme po potvrdení ponuky.";
+    window.print();
+  });
+
+  /* ---------- drobnosti ---------- */
+  var toastT;
+  function toast(msg){ var t = $("toast"); t.textContent = msg; t.classList.add("is-on"); clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("is-on"); }, 2200); }
+  var start = Date.now();
+  setInterval(function(){ var s = Math.floor((Date.now()-start)/1000); $("timer").textContent = Math.floor(s/60) + ":" + pad(s%60); }, 1000);
+
+  nastavDatumy(); kresliCennik(); kresliRiadky();
+})();
+</script>
+</body>
+</html>
