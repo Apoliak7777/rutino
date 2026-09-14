@@ -117,7 +117,14 @@ html.vlozene .top,html.vlozene details.nast,html.vlozene .cennik-foot{display:no
 html.vlozene .app{grid-template-columns:1fr;gap:14px;padding:14px}
 html.vlozene .meta,html.vlozene .akcie .hint,html.vlozene .pane__body>.f{display:none}
 html.vlozene .pane__body{padding:12px 14px}
-html.vlozene body{padding-bottom:58px}
+html.vlozene body{padding-bottom:58px;overflow-x:hidden}
+html.vlozene{scrollbar-width:thin}
+html.vlozene .pol{grid-template-columns:minmax(0,1fr) 66px 32px;gap:6px}
+html.vlozene .pol input{padding:5px 4px;-moz-appearance:textfield;appearance:textfield}
+html.vlozene .pol input::-webkit-inner-spin-button,html.vlozene .pol input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+html.vlozene table.lines th:nth-child(3),html.vlozene table.lines td:nth-child(3){display:none}
+html.vlozene table.lines th,html.vlozene table.lines td{padding:7px 4px;font-size:.88rem}
+html.vlozene table.lines input.q{width:46px}
 .vlozene-sum{display:none}
 html.vlozene .vlozene-sum{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:6;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--ink);color:var(--bg);font-size:.92rem}
 html.vlozene .vlozene-sum b{font-family:var(--display);font-size:1.15rem;font-weight:500;font-variant-numeric:tabular-nums}
