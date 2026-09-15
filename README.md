@@ -2,7 +2,7 @@
 
 Predajná stránka služby **Rutino**: malý program na mieru pre jeden opakovaný firemný proces
 (cenové ponuky, faktúry do tabuľky, evidencia namiesto Excelu). Pevná cena, ukážka na dátach
-klienta zadarmo, hotové do desiatich dní.
+hotové do desiatich dní.
 
 Statický web bez buildu a bez závislostí. Beží na GitHub Pages, doména `rutino.online`
 (súbor `CNAME`).

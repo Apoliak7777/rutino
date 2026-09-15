@@ -4,22 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rutino: jednu vec, ktorú vo firme robíte dookola, spravíme za vás</title>
-<meta name="description" content="Cenové ponuky, faktúry do tabuľky alebo evidencia namiesto Excelu. Vyberiete jeden proces, postavíme naň malý program. Pevná cena od 490 €, ukážka na vašich dátach zadarmo, hotové do desiatich dní, beží u vás.">
+<meta name="description" content="Cenové ponuky, faktúry do tabuľky alebo evidencia namiesto Excelu. Vyberiete jeden proces, postavíme naň malý program. Pevná cena od 490 €, hotové do desiatich dní, program je po zaplatení váš.">
 <meta name="theme-color" content="#F8F7F4">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141416">
 <link rel="canonical" href="https://rutino.online/">
 <meta property="og:title" content="Rutino: jednu vec, ktorú robíte dookola, spravíme za vás">
-<meta property="og:description" content="Cenové ponuky, faktúry do tabuľky, evidencia namiesto Excelu. Malý program presne na váš proces, pevná cena od 490 €, ukážka zadarmo.">
+<meta property="og:description" content="Cenové ponuky, faktúry do tabuľky, evidencia namiesto Excelu. Malý program presne na váš proces, pevná cena od 490 €.">
 <meta property="og:url" content="https://rutino.online/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="sk_SK">
 <meta property="og:image" content="https://rutino.online/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Rutino: jednu vec, ktorú robíte dookola, spravíme za vás. Od 490 €, ukážka zadarmo.">
+<meta property="og:image:alt" content="Rutino: jednu vec, ktorú robíte dookola, spravíme za vás. Od 490 €, hotové do 10 dní.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Rutino: jednu vec, ktorú robíte dookola, spravíme za vás">
-<meta name="twitter:description" content="Malý program presne na váš proces. Pevná cena od 490 €, ukážka na vašich dátach zadarmo, hotové do desiatich dní.">
+<meta name="twitter:description" content="Malý program presne na váš proces. Pevná cena od 490 €, hotové do desiatich dní.">
 <meta name="twitter:image" content="https://rutino.online/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="fonts/newsreader-500-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -35,7 +35,7 @@
 @font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 /* ---------- tokeny ----------
-   Rovnaký papier a atrament ako aiucenie.online, iný akcent: tehlová, aby sa tri značky dali rozlíšiť.
+   Svetlý papier a atrament, jeden akcent: tehlová.
    Nadpisy Newsreader, text Manrope, zaoblenia 6 px, rámy 8 px. Bez kariet, bez veľkých písmen nad nadpismi. */
 :root{
   color-scheme:light dark;
@@ -234,22 +234,6 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
 .pk--nie li::before{background:var(--muted)}
 @media (max-width:640px){.pk{grid-template-columns:1fr}}
 
-/* ---------- kto: vizitka vľavo, text vpravo ---------- */
-.kto{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(28px,5vw,72px);align-items:start}
-.vizitka{display:grid;align-content:start}
-.vizitka__head{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--ink)}
-.mono{width:52px;height:52px;border-radius:50%;background:var(--acc-soft);color:var(--acc);font-family:var(--display);font-size:1.2rem;letter-spacing:-.02em;display:grid;place-items:center;flex:none}
-.kto__name{display:block;font-family:var(--display);font-size:1.35rem;color:var(--ink);line-height:1.2}
-.kto__role{display:block;color:var(--muted);font-size:.92rem}
-.kto__links{display:grid;margin:0;font-weight:600}
-.kto__links a{display:grid;gap:2px;color:var(--ink);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--line);transition:color .25s var(--ease)}
-.kto__links a:hover{color:var(--acc)}
-.kto__links small{font-weight:500;font-size:.84rem;color:var(--muted)}
-.kto__text{display:grid;gap:14px}
-.kto__text h2{margin-bottom:6px}
-.kto__text p{color:var(--ink-2);text-wrap:pretty;max-width:58ch}
-@media (min-width:900px){.vizitka{order:-1}}
-@media (max-width:899px){.kto{grid-template-columns:1fr}.vizitka{margin-top:8px}}
 
 /* ---------- otázky ---------- */
 .qs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px clamp(28px,4vw,60px);margin-top:36px}
@@ -304,7 +288,6 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
   "serviceType": "Vývoj malého programu na mieru pre jeden opakovaný firemný proces",
   "url": "https://rutino.online/",
   "areaServed": "SK",
-  "provider": { "@type": "Person", "name": "Alex Poliak", "url": "https://apoliak.online" },
   "offers": [
     { "@type": "Offer", "name": "Ponukovač", "price": "490", "priceCurrency": "EUR", "description": "Cenová ponuka z vlastného cenníka za tri minúty, PDF a mail zákazníkovi" },
     { "@type": "Offer", "name": "Papiere do tabuľky", "price": "690", "priceCurrency": "EUR", "description": "Faktúry, dodacie listy a objednávky z PDF do tabuľky" },
@@ -323,7 +306,7 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
     <a href="#postup">Ako to prebieha</a>
     <a href="#cena">Cena</a>
     <a href="#otazky">Otázky</a>
-    <a class="cta" href="mailto:info@rutino.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino&amp;body=Dobr%C3%BD%20de%C5%88%2C%0A%0Aproces%2C%20ktor%C3%BD%20n%C3%A1s%20zdr%C5%BEuje%3A%20%0A%0Ako%C4%BEko%20%C4%8Dasu%20n%C3%A1m%20berie%3A%20%0A%0Astar%C3%BA%20ponuku%20alebo%20fakt%C3%BAru%20prikladám%20do%20pr%C3%ADlohy.%0A%0AFirma%3A%20%0AKontakt%3A%20">Chcem ukážku zadarmo</a>
+    <a class="cta" href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino&amp;body=Dobr%C3%BD%20de%C5%88%2C%0A%0Aproces%2C%20ktor%C3%BD%20n%C3%A1s%20zdr%C5%BEuje%3A%20%0A%0Ako%C4%BEko%20%C4%8Dasu%20n%C3%A1m%20berie%3A%20%0A%0AFirma%3A%20%0AKontakt%3A%20">Napíšte mi</a>
   </nav>
 </header>
 
@@ -335,7 +318,7 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
       <h1>Jednu vec, ktorú robíte dookola, spravíme za vás.</h1>
       <p class="lead">Cenové ponuky, faktúry alebo evidencia zákaziek. Vyberiete jeden proces, my naň postavíme malý program. Pevná cena, hotové do desiatich dní.</p>
       <div class="hero__cta">
-        <a class="cta" href="mailto:info@rutino.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino&amp;body=Dobr%C3%BD%20de%C5%88%2C%0A%0Aproces%2C%20ktor%C3%BD%20n%C3%A1s%20zdr%C5%BEuje%3A%20%0A%0Ako%C4%BEko%20%C4%8Dasu%20n%C3%A1m%20berie%3A%20%0A%0Astar%C3%BA%20ponuku%20alebo%20fakt%C3%BAru%20prikladám%20do%20pr%C3%ADlohy.%0A%0AFirma%3A%20%0AKontakt%3A%20">Chcem ukážku zadarmo</a>
+        <a class="cta" href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino&amp;body=Dobr%C3%BD%20de%C5%88%2C%0A%0Aproces%2C%20ktor%C3%BD%20n%C3%A1s%20zdr%C5%BEuje%3A%20%0A%0Ako%C4%BEko%20%C4%8Dasu%20n%C3%A1m%20berie%3A%20%0A%0AFirma%3A%20%0AKontakt%3A%20">Napíšte mi</a>
         <a class="cta cta--line" href="#ukazky">Vyskúšať ukážky</a>
       </div>
     </div>
@@ -353,8 +336,8 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
   <div class="shell">
     <div class="fakty" aria-label="Tri fakty">
       <div class="fakt"><b>od 490 €</b><span>pevná cena za jeden proces, bez mesačných poplatkov</span></div>
-      <div class="fakt"><b>do 10 dní</b><span>od odsúhlasenia ukážky po odovzdanie</span></div>
-      <div class="fakt"><b>ukážka zadarmo</b><span>na vašich dátach skôr, než zaplatíte</span></div>
+      <div class="fakt"><b>do 10 dní</b><span>od zálohy po odovzdanie</span></div>
+      <div class="fakt"><b>program je váš</b><span>po zaplatení aj so zdrojovým kódom</span></div>
     </div>
   </div>
 
@@ -415,7 +398,7 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
       </div>
     </div>
 
-    <p class="pozn">Váš proces nie je ani jeden z týchto troch? Práve preto sa začína ukážkou. Pošlite jeden súbor a jednu vetu a do troch dní uvidíte, či sa to dá a za koľko.</p>
+    <p class="pozn">Váš proces nie je ani jeden z týchto troch? Napíšte mi jednou vetou, čo vás zdržuje, a do 24 hodín dostanete odpoveď, či sa to dá, za koľko a dokedy.</p>
   </section>
 
   <!-- ================= POSTUP ================= -->
@@ -424,22 +407,22 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
     <div class="kroky">
       <article class="krok">
         <h3>Napíšete</h3>
-        <p>Pošlete jednu starú ponuku, faktúru alebo ten Excel, ktorý vás trápi, a jednu vetu o tom, čo vás zdržuje. Nič viac nepotrebujeme.</p>
+        <p>Jednou vetou, čo vás zdržuje. Ak môžete, priložte príklad: starú ponuku, faktúru alebo ten Excel, ktorý vás trápi.</p>
       </article>
       <article class="krok">
-        <h3>Do 3 dní ukážka</h3>
-        <p>Z vašich podkladov postavíme funkčnú ukážku a vyrobíme ňou tú istú ponuku alebo tabuľku, akú ste poslali. Zadarmo, výsledok vidíte skôr, než zaplatíte.</p>
+        <h3>Do 24 hodín cena</h3>
+        <p>Dostanete presnú cenu, termín a popis, čo bude program robiť. Keď súhlasíte, zaplatíte polovicu.</p>
       </article>
       <article class="krok">
         <h3>Do 10 dní stavba</h3>
-        <p>Po odsúhlasení ukážky a zálohe staviame celú toolku. Dve kolá úprav sú v cene, tretie je nová fáza.</p>
+        <p>Od zálohy staviame celý program. Dve kolá úprav sú v cene, tretie je nová fáza.</p>
       </article>
       <article class="krok">
         <h3>Odovzdanie</h3>
-        <p>Dostanete program, návod v PDF a krátky záznam obrazovky. Prvých 30 dní opravujeme chyby zadarmo.</p>
+        <p>Dostanete program, návod v PDF a krátky záznam obrazovky. Prvých 30 dní opravujeme chyby v rámci ceny.</p>
       </article>
     </div>
-    <p class="pozn">Celý čas komunikujete s jedným človekom. Termíny platia pre bežný rozsah, pri väčšom procese dostanete presný termín spolu s ukážkou.</p>
+    <p class="pozn">Celý čas komunikujete s jedným človekom. Termíny platia pre bežný rozsah, pri väčšom procese dostanete presný termín spolu s cenou.</p>
   </section>
 
   <!-- ================= CENA ================= -->
@@ -451,7 +434,7 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
         <p class="cena__per">za prvý proces, raz a dosť</p>
       </div>
       <div class="cena__text">
-        <p>Cena sa dohodne pri ukážke a potom sa nemení. Platí sa polovica po odsúhlasení ukážky a zvyšok pri odovzdaní, prevodom na účet. Žiadne mesačné poplatky za toolku, žiadne predplatné.</p>
+        <p>Cenu dostanete písomne pred začatím a potom sa nemení. Platí sa polovica pri objednávke a zvyšok pri odovzdaní, prevodom na účet. Žiadne mesačné poplatky za toolku, žiadne predplatné.</p>
         <p class="cena__kotva">Prečo je to lacnejšie než u agentúry: staviame jednu vec, nie systém. Žiadny projektový manažér, žiadne stretnutia navyše, žiadny mesačný paušál.</p>
         <ul class="baliky">
           <li class="balik"><span class="balik__name">Ponukovač</span><span class="balik__desc">cenník, formulár, PDF s logom, mail zákazníkovi</span><span class="balik__sum">490 €</span></li>
@@ -461,14 +444,14 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
           <li class="balik"><span class="balik__name">Úprava po odovzdaní</span><span class="balik__desc">nová funkcia alebo zmena, ktorá nie je oprava chyby</span><span class="balik__sum">od 90 €</span></li>
         </ul>
         <ul class="vcene" aria-label="V cene každej toolky">
-          <li>ukážka na vašich dátach vopred, zadarmo</li>
+          <li>presná cena a termín písomne pred začatím</li>
           <li>dve kolá úprav počas stavby</li>
           <li>návod v PDF a záznam obrazovky</li>
-          <li>30 dní opráv chýb zadarmo</li>
+          <li>30 dní opráv chýb po odovzdaní</li>
           <li>zdrojový kód je po zaplatení váš</li>
           <li>vaše dáta ostávajú u vás</li>
         </ul>
-        <p class="fine">Ceny sú konečné, som neplatca DPH. Toolka na proces, ktorý tu nie je, sa ocení pri ukážke, spravidla medzi 490 a 990 €.</p>
+        <p class="fine">Ceny sú konečné, som neplatca DPH. Program na proces, ktorý tu nie je, sa ocení po prvom maile, spravidla medzi 490 a 990 €.</p>
       </div>
     </div>
   </section>
@@ -532,28 +515,6 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
     </div>
   </section>
 
-  <!-- ================= KTO ================= -->
-  <section class="shell zone reveal" id="kto">
-    <div class="kto">
-      <div class="kto__text">
-        <h2>Jeden človek, tri veci, ktoré do seba zapadajú</h2>
-        <p>Weby pre malé podniky robím na apoliak.online, hodiny práce s AI na aiucenie.online a toolky tu. Tri ukážky vyššie sú postavené na procesoch, ktoré sa v malých firmách opakujú najčastejšie: ponuky, faktúry a evidencia.</p>
-        <p>Nie som agentúra. Keď napíšete, odpovedám ja, ukážku staviam ja a toolku odovzdávam ja. Referencie od klientov tu zatiaľ nie sú, namiesto nich máte tri toolky, ktoré si vyskúšate sami.</p>
-      </div>
-      <aside class="vizitka" aria-label="Kontaktná vizitka">
-        <div class="vizitka__head">
-          <div class="mono" aria-hidden="true">AP</div>
-          <div><span class="kto__name">Alex Poliak</span><span class="kto__role">toolky, weby a AI pre malé firmy</span></div>
-        </div>
-        <div class="kto__links">
-          <a href="https://apoliak.online" target="_blank" rel="noopener">apoliak.online<small>weby na mieru</small></a>
-          <a href="https://aiucenie.online" target="_blank" rel="noopener">aiucenie.online<small>hodiny práce s AI</small></a>
-          <a href="mailto:info@rutino.online">info@rutino.online<small>odpoveď do 24 hodín</small></a>
-        </div>
-      </aside>
-    </div>
-  </section>
-
   <!-- ================= OTÁZKY ================= -->
   <section class="shell zone reveal" id="otazky">
     <h2>Na čo sa firmy pýtajú pred prvou toolkou</h2>
@@ -562,8 +523,8 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
       <div class="q"><h3>Čo keď zmeníme cenník alebo šablónu?</h3><p>Cenník, texty a logo si meníte sami, sú v toolke na jednom mieste a návod to ukazuje. Za zmenu cien sa neplatí.</p></div>
       <div class="q"><h3>Funguje to na Macu a v mobile?</h3><p>Ponukovač a evidencia bežia v prehliadači, teda všade. Toolka na spracovanie súborov je pre Windows, v zadaní sa na to pýtam vopred.</p></div>
       <div class="q"><h3>Je v tom umelá inteligencia?</h3><p>Len tam, kde je voľný text, napríklad „prečítaj mail od zákazníka a navrhni položky“. Klikanie a počítanie je obyčajný program bez poplatkov. Ak AI chcete, beží na vašom kľúči a platíte centy za použitie.</p></div>
-      <div class="q"><h3>Čo keď to nebude fungovať?</h3><p>Ukážku vidíte skôr, než zaplatíte. Po odovzdaní 30 dní opravujem chyby zadarmo. Nová funkcia je nová objednávka, nie oprava.</p></div>
-      <div class="q"><h3>Ako sa platí?</h3><p>Polovica po odsúhlasení ukážky, zvyšok pri odovzdaní, prevodom na účet. Doklad dostanete ku každej platbe.</p></div>
+      <div class="q"><h3>Čo keď to nebude fungovať?</h3><p>Pred začatím dostanete písomne, čo presne bude program robiť. Počas stavby sú dve kolá úprav a po odovzdaní 30 dní opravujem chyby. Nová funkcia je nová objednávka, nie oprava.</p></div>
+      <div class="q"><h3>Ako sa platí?</h3><p>Polovica pri objednávke, zvyšok pri odovzdaní, prevodom na účet. Doklad dostanete ku každej platbe.</p></div>
       <div class="q"><h3>Dostaneme aj zdrojový kód?</h3><p>Áno. Po zaplatení je toolka aj kód váš a môžete si ju dať upraviť komukoľvek. Nie ste na mňa naviazaní.</p></div>
       <div class="q"><h3>Potrebujeme tri procesy naraz</h3><p>Ideme po jednom, ten najbolestivejší prvý. Každý ďalší je za 390 € a začne sa hneď po odovzdaní predchádzajúceho.</p></div>
     </div>
@@ -573,17 +534,16 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
   <section class="shell reveal" id="kontakt">
     <div class="strip">
       <div>
-        <h2>Pošlite jeden súbor a jednu vetu</h2>
-        <p>Starú ponuku, faktúru alebo Excel a čo vás na tom zdržuje. Do troch dní dostanete ukážku na vlastných dátach, zadarmo a bez záväzku.</p>
+        <h2>Napíšte, čo vás zdržuje</h2>
+        <p>Stačí jedna veta. Do 24 hodín odpoviem, či sa to dá, za koľko a dokedy.</p>
         <ul class="strip__co" aria-label="Čo napísať">
           <li>ktorý proces a koľko času vám berie,</li>
-          <li>jeden starý súbor v prílohe,</li>
+          <li>príklad súboru, ak ho máte po ruke,</li>
           <li>názov firmy a na koho sa mám ozvať.</li>
         </ul>
       </div>
       <div class="strip__links">
-        <a href="mailto:info@rutino.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino">info@rutino.online</a>
-        <a href="tel:+421902464022">0902 464 022</a>
+        <a href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino">info@rutino.online</a>
       </div>
     </div>
   </section>
@@ -596,16 +556,14 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
   <nav aria-label="Pätička">
     <a href="#cena">Cena</a>
     <a href="#otazky">Otázky</a>
-    <a href="https://apoliak.online" target="_blank" rel="noopener">Weby na mieru</a>
-    <a href="https://aiucenie.online" target="_blank" rel="noopener">Hodiny AI</a>
     <a href="ochrana-udajov.html">Ochrana údajov</a>
   </nav>
   <span class="foot__note">Stránka nenačítava žiadne cudzie skripty, písma ani cookies. Ukážky nič neukladajú ani neposielajú.</span>
 </footer>
 
 <div class="lepka" id="lepka" aria-hidden="true">
-  <div><strong>od 490 €</strong><small>pevná cena, ukážka zadarmo</small></div>
-  <a class="cta" href="mailto:info@rutino.online?subject=Uk%C3%A1%C5%BEka%20zadarmo%3A%20Rutino" tabindex="-1">Chcem ukážku zadarmo</a>
+  <div><strong>od 490 €</strong><small>pevná cena, program je váš</small></div>
+  <a class="cta" href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino" tabindex="-1">Napíšte mi</a>
 </div>
 
 <script type="application/ld+json">
@@ -614,8 +572,8 @@ html:not(.js) .uk__panel + .uk__panel{margin-top:40px;padding-top:32px;border-to
   "@type": "FAQPage",
   "mainEntity": [
     { "@type": "Question", "name": "Kde sú naše dáta?", "acceptedAnswer": { "@type": "Answer", "text": "U vás. Toolka beží vo vašom počítači alebo prehliadači, nič sa neposiela na cudzí server. Evidencia pre viac ľudí beží na serveri, ku ktorému má prístup len vaša firma." } },
-    { "@type": "Question", "name": "Čo keď to nebude fungovať?", "acceptedAnswer": { "@type": "Answer", "text": "Ukážku vidíte skôr, než zaplatíte. Po odovzdaní 30 dní opravujem chyby zadarmo. Nová funkcia je nová objednávka." } },
-    { "@type": "Question", "name": "Ako sa platí?", "acceptedAnswer": { "@type": "Answer", "text": "Polovica po odsúhlasení ukážky, zvyšok pri odovzdaní, prevodom na účet." } },
+    { "@type": "Question", "name": "Čo keď to nebude fungovať?", "acceptedAnswer": { "@type": "Answer", "text": "Pred začatím dostanete písomne, čo presne bude program robiť. Po odovzdaní 30 dní opravujem chyby. Nová funkcia je nová objednávka." } },
+    { "@type": "Question", "name": "Ako sa platí?", "acceptedAnswer": { "@type": "Answer", "text": "Polovica pri objednávke, zvyšok pri odovzdaní, prevodom na účet." } },
     { "@type": "Question", "name": "Dostaneme aj zdrojový kód?", "acceptedAnswer": { "@type": "Answer", "text": "Áno. Po zaplatení je toolka aj kód váš." } }
   ]
 }
