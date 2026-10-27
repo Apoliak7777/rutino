@@ -3,199 +3,326 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Evidencia zákaziek namiesto Excelu (ukážka)</title>
-<meta name="description" content="Ukážková toolka: zákazky servisnej firmy na jednom mieste, so stavom, technikom a termínom. Tabuľka aj nástenka, denný rozpis na tlač, export do Excelu.">
+<title>Evidencia namiesto Excelu (ukážka)</title>
+<meta name="description" content="Ukážka programu Evidencia so zákazkami vymyslenej tlačiarne. Vyskúšajte si tabuľku aj nástenku.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F8F7F4">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#F2B98C">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='3' fill='%23F2B98C'/%3E%3Ctext x='32' y='46' font-family='Arial,sans-serif' font-weight='700' font-size='44' text-anchor='middle' fill='%234A2108'%3Er%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="../../fonts/funnel-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/funnel-sans-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/funnel-display-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+/* Písma sú na disku webu (OFL), nič sa nenačítava z cudzej domény.
+   Funnel Display len na nadpisy, Funnel Sans na všetko ostatné vrátane čísel. */
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-display-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-display-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-sans-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-sans-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ---------- farby Evidencie: marhuľová plocha, hnedý text, jemný tón na pozadia a biela ---------- */
 :root{
   color-scheme:light;
-  --bg:#F8F7F4; --surface:#FFFFFF; --surface-2:#EFEDE8;
-  --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74;
-  --line:rgba(21,21,23,.13); --box-line:rgba(21,21,23,.08);
-  --acc:#C2410C; --acc-hover:#A33608; --acc-ink:#FFFFFF;
-  --acc-soft:rgba(194,65,12,.08); --acc-line:rgba(194,65,12,.35);
-  --shadow:0 1px 2px rgba(21,21,23,.06),0 20px 40px -28px rgba(21,21,23,.35);
-  --display:"Newsreader",Georgia,"Times New Roman",serif;
-  --body:"Manrope","Segoe UI",system-ui,sans-serif;
-  --r:6px;
-  --s-nova:#6E6E74; --s-plan:#1F45D8; --s-praca:#C2410C; --s-hotova:#1F7A4D; --s-fakt:#151517;
+  --pl:#F2B98C;            /* plocha programu, hnedý text na nej 8,0 : 1 */
+  --tx:#4A2108;            /* hlavný text, na bielej 13,9 : 1 */
+  --tx-hover:#653313;      /* plné tlačidlo pod myšou */
+  --jem:#FCE8D8;           /* jemná: hlavička tabuľky, riadok pod myšou, stĺpce nástenky */
+  --bie:#FFFFFF;
+  --tx2:#6E4326;           /* menej dôležitý text, 8,4 : 1 na bielej, 7,1 : 1 na jemnej */
+  --ram:#A07A62;           /* rámik polí, 3,9 : 1 na bielej */
+  --linka:#EEDCCD;         /* deliace čiary v tabuľke */
+  --linka2:#DDBFA7;        /* rámik kariet a súhrnu */
+  --zle:#A3261B;           /* po termíne a mazanie, 7,4 : 1 na bielej */
+  /* stav zákazky nemá vlastnú farbu: na nástenke ho určuje stĺpec, v tabuľke text vo výbere */
+  --r:3px;
+  --disp:"Funnel Display",Arial,sans-serif;
+  --text:"Funnel Sans",Arial,sans-serif;
+  --okraj:clamp(16px,3vw,32px);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --sipka:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%234A2108' stroke-width='2'/%3E%3C/svg%3E");
 }
+
+/* ---------- základ ---------- */
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
-button{font:inherit;color:inherit;cursor:pointer}
-input,select,textarea{font:inherit;color:inherit}
-h1,h2,h3{font-family:var(--display);font-weight:500;margin:0;letter-spacing:-.01em}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
-.top{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.top h1{font-size:1.25rem}
-.top .sub{color:var(--muted);font-size:.86rem}
-.top .spacer{flex:1}
-.back{font-size:.86rem;color:var(--ink-2);text-decoration:none;font-weight:600}
-.back:hover{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:.9rem;white-space:nowrap;text-decoration:none;transition:border-color .2s,background-color .2s}
-.btn:hover{border-color:var(--ink)}
-.btn--acc{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
-.btn--acc:hover{background:var(--acc-hover);border-color:transparent}
-.btn--sm{padding:6px 10px;font-size:.84rem}
-.btn.is-on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.wrap{max-width:1360px;margin-inline:auto;padding:20px}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;background:var(--bie)}
+body{margin:0;background:var(--bie);color:var(--tx);font-family:var(--text);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;letter-spacing:-.015em;line-height:1.05}
+p{margin:0}
+:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
+.wrap{width:min(100% - 2 * var(--okraj), 1360px);margin-inline:auto}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nb{white-space:nowrap}
 
-/* ---------- čísla hore ---------- */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
-@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{background:var(--surface);border:1px solid var(--box-line);border-radius:8px;padding:12px 14px}
-.stat small{display:block;font-size:.76rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
-.stat b{font-family:var(--display);font-weight:500;font-size:1.8rem;line-height:1.1;font-variant-numeric:tabular-nums}
+/* tlačidlá: obdĺžnik s malým zaoblením, plné hnedé alebo biele s hnedým rámikom */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border:1.5px solid var(--tx);border-radius:var(--r);background:var(--bie);color:var(--tx);
+  font:600 16px/1.1 var(--text);letter-spacing:0;text-decoration:none;white-space:nowrap;
+  transition:background-color .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .1s var(--ease)}
+.btn:hover{background:var(--jem)}
+.btn:active{transform:translateY(1px)}
+.btn--p{background:var(--tx);color:var(--bie)}
+.btn--p:hover{background:var(--tx-hover);border-color:var(--tx-hover)}
+.btn--sm{min-height:44px;padding:0 14px;font-size:15px}
 
-/* ---------- lišta nástrojov ---------- */
-.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
-.bar input[type=search],.bar select{padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
-.bar input[type=search]{min-width:220px;flex:1}
-.bar .grp{display:inline-flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.bar .grp button{border:0;background:var(--surface);padding:8px 12px;font-weight:600;font-size:.88rem}
-.bar .grp button.is-on{background:var(--ink);color:var(--bg)}
+/* ---------- hlavička ukážky: rovnaká vo všetkých troch ukážkach ---------- */
+.uk-hlava{background:var(--pl);color:var(--tx)}
+.uk-lista{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;min-height:64px}
+.logo{display:inline-flex;align-items:center;min-height:44px;font:600 27px/1 var(--disp);letter-spacing:-.035em;color:var(--tx);text-decoration:none}
+.spat{display:inline-flex;align-items:center;min-height:44px;font-weight:600;font-size:16px;color:var(--tx);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:.22em;white-space:nowrap}
+.spat:hover{text-decoration-thickness:2.5px}
+.uk-obsah{padding-block:clamp(18px,2.4vw,30px) clamp(22px,2.6vw,32px)}
+.uk-hlava h1{font-size:clamp(36px,3.9vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.uk-popis{margin-top:10px;max-width:52ch;font-size:clamp(17px,1.4vw,20px);line-height:1.4;text-wrap:pretty}
+.uk-ukazka{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;margin-top:14px}
+.uk-ukazka p{flex:1 1 420px;max-width:68ch;font-size:16px;line-height:1.45;text-wrap:pretty}
+.uk-hlava .btn--p:focus-visible{outline-offset:3px}
+@media (max-width:600px){
+  .uk-lista{min-height:56px}
+  .uk-ukazka{margin-top:12px}
+  .uk-ukazka p{flex-basis:100%}
+}
+
+/* ---------- súhrn: jedna veta nad zákazkami ---------- */
+.stats{margin:clamp(20px,2.6vw,30px) 0 16px;font-size:17px;line-height:1.45;font-variant-numeric:tabular-nums}
+.stats b{font-weight:600}
+
+/* ---------- lišta: hľadanie, filtre, prepínač a nová zákazka ---------- */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin-bottom:14px}
+.pole{min-height:46px;padding:8px 12px;border:1.5px solid var(--ram);border-radius:var(--r);background-color:var(--bie);font-size:16px;color:var(--tx);transition:border-color .15s var(--ease)}
+.pole:hover{border-color:var(--tx)}
+.pole::placeholder{color:var(--tx2);opacity:1}
+.bar input[type=search]{flex:1 1 260px;min-width:0}
+select{-webkit-appearance:none;appearance:none;background:var(--sipka) right 12px center/12px 8px no-repeat,var(--bie);padding-right:36px!important;cursor:pointer}
+.grp{display:inline-flex;border:1.5px solid var(--tx);border-radius:var(--r);overflow:hidden;background:var(--bie)}
+.grp button{border:0;background:transparent;padding:0 16px;min-height:44px;font-weight:600;font-size:16px;transition:background-color .15s var(--ease)}
+.grp button+button{border-left:1.5px solid var(--tx)}
+.grp button:hover{background:var(--jem)}
+.grp button.is-on{background:var(--pl)}
+.grp button:focus-visible{outline-offset:-5px}
 .bar .spacer{flex:1}
+@media (max-width:600px){
+  .bar select{flex:1 1 140px;min-width:0}
+  .grp{flex:1 1 auto}
+  .grp button{flex:1}
+  .bar .spacer{display:none}
+  .bar #nova{flex:1 1 auto}
+}
 
 /* ---------- tabuľka ---------- */
-.pane{background:var(--surface);border:1px solid var(--box-line);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
-.scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:980px}
-th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 10px;border-bottom:1px solid var(--ink);white-space:nowrap;cursor:pointer;user-select:none}
-th.sorted::after{content:" ↓";color:var(--acc)}
-td{padding:9px 10px;border-bottom:1px solid var(--box-line);vertical-align:middle;font-size:.92rem}
-tr:hover td{background:var(--bg)}
-td.c{white-space:nowrap;font-weight:700}
-td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
-td .pop{display:block;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.76rem;font-weight:700;color:#fff;white-space:nowrap}
-.tag--nova{background:var(--s-nova)} .tag--plan{background:var(--s-plan)} .tag--praca{background:var(--s-praca)} .tag--hotova{background:var(--s-hotova)} .tag--fakt{background:var(--s-fakt)}
-td select.st{padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--surface);font-size:.84rem}
-td.akc{white-space:nowrap}
-td.akc button{border:0;background:transparent;color:var(--ink-2);padding:4px 6px;border-radius:4px;font-weight:600;font-size:.84rem}
-td.akc button:hover{background:var(--surface-2);color:var(--ink)}
-.empty{padding:34px 16px;text-align:center;color:var(--muted)}
-.late{color:#B3261E;font-weight:700}
+.pane{background:var(--bie);border:1.5px solid var(--tx);border-radius:var(--r);overflow:hidden}
+.scroll{position:relative;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:1000px}
+th{font-size:14px;font-weight:600;color:var(--tx);text-align:left;padding:12px 10px 11px;background:var(--jem);border-bottom:1.5px solid var(--tx);white-space:nowrap;user-select:none;transition:background-color .15s var(--ease)}
+th[data-s]{cursor:pointer}
+th[data-s]:hover{text-decoration:underline;text-underline-offset:.2em}
+th[data-s]:focus-visible{outline-offset:-4px}
+th.sorted{background:var(--pl)}
+th.sorted::after{content:"\00a0↓"}
+th.vpravo{text-align:right}
+td{padding:11px 10px;border-bottom:1px solid var(--linka);vertical-align:middle;font-size:15px;line-height:1.4}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--jem)}
+td b{font-weight:600}
+td .kon{display:block;font-size:13.5px;color:var(--tx2)}
+td.c{white-space:nowrap;font-size:14px;font-weight:500;color:var(--tx2);font-variant-numeric:tabular-nums}
+td.num{text-align:right;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+td.mn,td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
+td .pop{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;min-width:180px;max-width:330px;overflow:hidden}
+.ticho{color:var(--tx2);font-weight:400}
+.late{color:var(--zle);font-weight:600}
+.late small{display:block;font-size:13px;font-weight:500}
+td select.st{min-height:38px;padding:4px 10px;border:1.5px solid var(--ram);border-radius:var(--r);background-size:10px 7px;font-size:15px;font-weight:500}
+td select.st:hover{border-color:var(--tx)}
+td.akc{white-space:nowrap;text-align:right}
+td.akc button{min-height:38px;padding:0 12px;border:1.5px solid var(--tx);border-radius:var(--r);background:var(--bie);font-weight:600;font-size:15px;transition:background-color .15s var(--ease)}
+td.akc button:hover{background:var(--pl)}
+.empty{padding:36px 16px;text-align:center;font-size:16px;color:var(--tx2)}
+@media (min-width:760px){
+  #rows td:nth-child(2){min-width:170px}
+}
+
+/* tabuľka na mobile: každá zákazka ako lístok, zoraďovanie v jednom riadku */
+@media (max-width:759px){
+  .scroll{overflow:visible}
+  table{display:block;min-width:0}
+  thead{display:block;background:var(--jem);border-bottom:1.5px solid var(--tx)}
+  thead tr{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px}
+  thead tr::before{content:"Zoradiť:";flex:none;font-size:14px;font-weight:600;margin-right:2px}
+  th{flex:none;padding:0 12px;min-height:44px;display:inline-flex;align-items:center;border:1.5px solid var(--tx);border-radius:var(--r);background:var(--bie)}
+  th:not([data-s]){display:none}
+  th.sorted{background:var(--pl)}
+  th[data-s]:focus-visible{outline-offset:2px}
+  tbody{display:block}
+  #rows tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;grid-template-areas:"c c num" "zak zak zak" "pop pop pop" "mn kto d" "st st akc";gap:8px 14px;padding:14px;border-bottom:1.5px solid var(--linka2)}
+  #rows tr:last-child{border-bottom:0}
+  #rows td{display:block;padding:0;border:0;background:transparent;font-size:15.5px}
+  #rows td:nth-child(1){grid-area:c;align-self:center}
+  #rows td:nth-child(2){grid-area:zak;font-size:17px;line-height:1.3}
+  #rows td:nth-child(3){grid-area:pop}
+  #rows td:nth-child(4){grid-area:mn}
+  #rows td:nth-child(5){grid-area:kto}
+  #rows td:nth-child(6){grid-area:d;text-align:right}
+  #rows td:nth-child(7){grid-area:st}
+  #rows td:nth-child(8){grid-area:num;align-self:center;font-size:16px}
+  #rows td:nth-child(9){grid-area:akc}
+  #rows td:nth-child(4),#rows td:nth-child(5),#rows td:nth-child(6){padding-top:4px}
+  #rows td:nth-child(4)::before,#rows td:nth-child(5)::before,#rows td:nth-child(6)::before{display:block;margin-bottom:2px;font-size:13px;font-weight:500;color:var(--tx2)}
+  #rows td:nth-child(4)::before{content:"Množstvo"}
+  #rows td:nth-child(5)::before{content:"Kto robí"}
+  #rows td:nth-child(6)::before{content:"Termín"}
+  #rows td .pop{display:block;min-width:0;max-width:none;overflow:visible}
+  #rows td.mn,#rows td.d{white-space:normal}
+  #rows td select.st{width:100%;min-height:44px}
+  #rows td.akc button{min-height:44px}
+}
+/* dotykové zariadenia (aj tablet): stav a Upraviť aspoň 44 px */
+@media (pointer:coarse){
+  td select.st,td.akc button{min-height:44px}
+}
 
 /* ---------- nástenka ---------- */
-.board{display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
-.col{background:var(--surface-2);border-radius:8px;padding:10px;min-height:200px;display:grid;align-content:start;gap:8px}
-.col h3{font-family:var(--body);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:flex;justify-content:space-between}
-.card{background:var(--surface);border:1px solid var(--box-line);border-left:3px solid var(--s-nova);border-radius:6px;padding:10px 12px;cursor:pointer;display:grid;gap:3px;font-size:.88rem;transition:transform .15s,box-shadow .15s}
-.card:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
-.card b{font-size:.93rem}
-.card small{color:var(--muted)}
-.card.s-plan{border-left-color:var(--s-plan)} .card.s-praca{border-left-color:var(--s-praca)} .card.s-hotova{border-left-color:var(--s-hotova)} .card.s-fakt{border-left-color:var(--s-fakt)}
-.card.is-over{outline:2px dashed var(--acc)}
+.board{display:grid;grid-template-columns:repeat(5,minmax(210px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px;align-items:start}
+.col{background:var(--jem);border-radius:var(--r);padding:10px;min-height:260px;display:grid;align-content:start;gap:8px;transition:background-color .15s var(--ease)}
+.col.is-ciel{background:var(--bie);outline:2px dashed var(--tx);outline-offset:-4px}
+.col h3{display:flex;align-items:baseline;gap:8px;padding:2px 2px 4px;font-size:19px;letter-spacing:-.01em;line-height:1.2}
+.col h3 span{margin-left:auto;font-family:var(--text);font-size:15px;font-weight:600;color:var(--tx2);font-variant-numeric:tabular-nums}
+.card{background:var(--bie);border:1px solid var(--linka2);border-radius:var(--r);padding:10px 12px 11px;cursor:grab;display:grid;gap:4px;font-size:14.5px;line-height:1.35;transition:border-color .15s var(--ease),opacity .15s var(--ease)}
+.card:hover{border-color:var(--tx)}
+.card:active{cursor:grabbing}
+.card:focus-visible{outline-offset:1px}
+.card b{font-size:15.5px;font-weight:600;line-height:1.25}
+.card>span{color:var(--tx2)}
+.card small{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.card small .late{font-weight:700}
+.card.is-tahane{opacity:.45}
+.tah{display:none;margin-top:10px;font-size:15px;color:var(--tx2)}
+#board-view:not([hidden]) + .tah{display:block}
+.tah--mob{display:none}
+@media (max-width:759px){
+  .tah--pc{display:none}
+  .tah--mob{display:inline}
+  .board{grid-template-columns:repeat(5,minmax(78%,1fr));scroll-snap-type:x proximity}
+  .col{scroll-snap-align:start}
+}
 
-/* ---------- dialóg ---------- */
-dialog{border:1px solid var(--box-line);border-radius:8px;padding:0;width:min(640px,94vw);box-shadow:var(--shadow);background:var(--surface);color:var(--ink)}
-dialog::backdrop{background:rgba(21,21,23,.4)}
-dialog form{padding:18px 20px;display:grid;gap:12px}
-dialog h2{font-size:1.3rem}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+/* ---------- dialóg zákazky ---------- */
+dialog{border:1.5px solid var(--tx);border-radius:var(--r);padding:0;width:min(660px,calc(100vw - 24px));background:var(--bie);color:var(--tx);overscroll-behavior:contain}
+dialog::backdrop{background:rgba(74,33,8,.5)}
+dialog form{display:grid;gap:16px;padding:0 20px 20px}
+dialog h2{margin:0 -20px;padding:16px 20px 14px;background:var(--pl);font-size:clamp(25px,3.4vw,30px);letter-spacing:-.02em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
 @media (max-width:560px){.grid2{grid-template-columns:1fr}}
-.f{display:grid;gap:4px}
-.f label{font-size:.76rem;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:uppercase}
-.f input,.f select,.f textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
-.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.f{display:grid;gap:5px;min-width:0}
+.f label{font-size:14px;font-weight:600;line-height:1.3}
+.f input,.f select,.f textarea{width:100%;min-height:46px;padding:9px 12px;border:1.5px solid var(--ram);border-radius:var(--r);background-color:var(--bie);font-size:16px;color:var(--tx)}
+.f input:hover,.f select:hover,.f textarea:hover{border-color:var(--tx)}
+.f textarea{min-height:0;resize:vertical;line-height:1.4}
+.f input[readonly]{background:var(--jem);border-color:var(--linka2);font-weight:600;font-variant-numeric:tabular-nums}
+.f input:focus-visible,.f select:focus-visible,.f textarea:focus-visible{outline-offset:1px}
 .f--wide{grid-column:1/-1}
-.dlg-akcie{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
-.dlg-akcie .del{margin-right:auto;color:#B3261E}
-.pozn{margin-top:22px;padding:14px 16px;border-left:3px solid var(--acc);background:var(--acc-soft);font-size:.92rem;color:var(--ink-2);border-radius:0 var(--r) var(--r) 0}
-.pozn b{color:var(--ink)}
-.ukazka-lista{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:16px;padding:10px 14px;border-left:3px solid var(--acc);background:var(--acc-soft);border-radius:0 var(--r) var(--r) 0;font-size:.9rem;color:var(--ink-2)}
-.ukazka-lista b{color:var(--ink)}
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:.9rem;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9}
+.dlg-akcie{position:sticky;bottom:0;z-index:1;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin:0 -20px -20px;padding:14px 20px 18px;background:var(--bie);border-top:1px solid var(--linka)}
+@media (max-width:480px){.dlg-akcie{gap:6px}.dlg-akcie .btn{padding:0 12px}}
+.dlg-akcie .del{margin-right:auto;color:var(--zle);border-color:var(--zle)}
+.dlg-akcie .del:hover{background:var(--zle);color:var(--bie)}
+
+/* ---------- vrátiť ukážku, na konci program pre vás (rovnaký blok ako v ostatných dvoch ukážkach) a hlásenie ---------- */
+.reset-r{margin-top:20px}
+main.wrap{padding-bottom:8px}
+.koniec{margin-top:clamp(32px,4vw,56px);background:var(--pl);color:var(--tx)}
+.koniec__in{padding-block:clamp(28px,4vw,56px)}
+.koniec h2{font-size:clamp(30px,3.4vw,48px);max-width:22ch}
+.koniec p{margin-top:14px;max-width:62ch;font-size:clamp(16px,1.3vw,18px);line-height:1.55;text-wrap:pretty}
+.koniec .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.toast{position:fixed;left:50%;bottom:22px;width:max-content;max-width:calc(100vw - 32px);transform:translate(-50%,16px);opacity:0;background:var(--tx);color:var(--bie);border-radius:var(--r);padding:12px 16px;font-size:15px;font-weight:500;transition:opacity .25s var(--ease),transform .25s var(--ease);pointer-events:none;z-index:9}
 .toast.is-on{opacity:1;transform:translate(-50%,0)}
 
-/* ---------- denný rozpis na tlač ---------- */
-#tlac{display:none}
-@media print{
-  @page{size:A4;margin:16mm}
-  body{background:#fff;color:#000}
-  .top,.wrap,dialog,.toast{display:none !important}
-  #tlac{display:block;font-family:"Manrope","Segoe UI",Arial,sans-serif;color:#111;font-size:10.5pt}
-  #tlac h2{font-family:Georgia,serif;font-weight:500;font-size:18pt;margin:0 0 4px}
-  #tlac p{margin:0 0 12px;color:#555}
-  #tlac table{width:100%;border-collapse:collapse;min-width:0}
-  #tlac th{border-bottom:1.5px solid #111;padding:6px 4px;font-size:8.5pt;text-transform:uppercase;letter-spacing:.05em;color:#555;text-align:left}
-  #tlac td{padding:7px 4px;border-bottom:1px solid #ddd;vertical-align:top}
-  #tlac .box{width:14px;height:14px;border:1.2px solid #333;display:inline-block;vertical-align:middle}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
 }
 </style>
 </head>
 <body>
 
-<header class="top">
-  <div>
-    <h1>Evidencia zákaziek</h1>
-    <div class="sub">ukážková toolka pre vymyslený servis klimatizácií, namiesto zdieľaného Excelu</div>
+<header class="uk-hlava">
+  <div class="wrap uk-lista">
+    <a class="logo" href="../../" aria-label="Rutino, úvodná stránka">rutino</a>
+    <a class="spat" href="../../?co=zakazky#p-zakazky">Späť na rutino.online</a>
   </div>
-  <div class="spacer"></div>
-  <a class="back" href="../../#ukazky">Späť na rutino.online</a>
+  <div class="wrap uk-obsah">
+    <h1>Evidencia namiesto Excelu</h1>
+    <p class="uk-popis">Celá firma tu vidí zákazky, ich stav, ľudí a&nbsp;termíny na jednom mieste, v&nbsp;tabuľke alebo na nástenke.</p>
+    <div class="uk-ukazka" role="note">
+      <p>Toto je ukážka pre vymyslenú Tlačiareň Bodka&nbsp;s.&nbsp;r.&nbsp;o. Skúšajte, čo chcete. Keď stránku obnovíte, bude všetko ako na začiatku.</p>
+      <a class="btn btn--p" href="../../?co=zakazky#kontakt">Napíšte mi</a>
+    </div>
+  </div>
 </header>
 
+<noscript><p class="wrap" style="padding-block:16px">Ukážka potrebuje zapnutý JavaScript. Bez neho sa zákazky nenačítajú.</p></noscript>
+
 <main class="wrap">
-  <div class="ukazka-lista"><span>Ukážka pre vymyslený servis, nič neukladá a po obnovení stránky sa vráti na začiatok. <b>Vaša toolka beží na serveri pre celú firmu a pamätá si všetko.</b></span><a class="btn btn--acc" href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino">Napíšte mi</a></div>
-  <div class="stats" aria-label="Prehľad">
-    <div class="stat"><small>Otvorené zákazky</small><b id="st-open">0</b></div>
-    <div class="stat"><small>Dnes naplánované</small><b id="st-dnes">0</b></div>
-    <div class="stat"><small>Hotové, čakajú na faktúru</small><b id="st-fakt">0</b></div>
-    <div class="stat"><small>Tento mesiac hotové</small><b id="st-mesiac">0 €</b></div>
-  </div>
+  <p class="stats"><b id="st-open">0</b> <span id="st-open-t">otvorených zákaziek</span>, <b id="st-dnes">0</b> na dnes, <b id="st-fakt">0</b> <span id="st-fakt-t">čaká na faktúru</span>, tento mesiac hotové za <b id="st-mesiac">0&nbsp;€</b> bez DPH.</p>
 
   <div class="bar">
-    <input type="search" id="q" placeholder="Hľadať zákazníka, adresu, popis" aria-label="Hľadať">
-    <select id="f-stav" aria-label="Filter podľa stavu"><option value="">Všetky stavy</option><option value="nova">Nová</option><option value="plan">Naplánovaná</option><option value="praca">Rozpracovaná</option><option value="hotova">Hotová</option><option value="fakt">Fakturovaná</option></select>
-    <select id="f-tech" aria-label="Filter podľa technika"><option value="">Všetci technici</option></select>
-    <div class="grp" role="group" aria-label="Zobrazenie"><button type="button" id="v-tab" class="is-on">Tabuľka</button><button type="button" id="v-board">Nástenka</button></div>
+    <input class="pole" type="search" id="q" placeholder="Hľadať zákazníka, prácu, číslo…" aria-label="Hľadať" autocomplete="off">
+    <select class="pole" id="f-stav" aria-label="Filter podľa stavu"><option value="">Všetky stavy</option><option value="nova">Nová</option><option value="plan">Naplánovaná</option><option value="praca">Rozpracovaná</option><option value="hotova">Hotová</option><option value="fakt">Fakturovaná</option></select>
+    <select class="pole" id="f-tech" aria-label="Filter podľa človeka"><option value="">Všetci ľudia</option></select>
+    <div class="grp" role="group" aria-label="Zobrazenie"><button type="button" id="v-tab" class="is-on" aria-pressed="true">Tabuľka</button><button type="button" id="v-board" aria-pressed="false">Nástenka</button></div>
     <span class="spacer"></span>
-    <button class="btn btn--acc" id="nova" type="button">Nová zákazka</button>
+    <button class="btn btn--p" id="nova" type="button">Nová zákazka</button>
   </div>
 
   <section class="pane" id="tab-view" aria-label="Zákazky">
     <div class="scroll">
       <table>
         <thead><tr>
-          <th data-s="cislo">Číslo</th><th data-s="zakaznik">Zákazník</th><th data-s="adresa">Adresa</th><th>Popis</th><th data-s="technik">Technik</th><th data-s="termin" class="sorted">Termín</th><th data-s="stav">Stav</th><th data-s="cena" style="text-align:right">Cena bez DPH</th><th></th>
+          <th data-s="cislo" tabindex="0">Číslo</th><th data-s="zakaznik" tabindex="0">Zákazník</th><th>Popis</th><th>Množstvo</th><th data-s="kto" tabindex="0">Kto robí</th><th data-s="termin" tabindex="0" class="sorted" aria-sort="ascending">Termín</th><th data-s="stav" tabindex="0">Stav</th><th data-s="cena" tabindex="0" class="vpravo">Cena bez DPH</th><th><span class="vh">Upraviť</span></th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table>
-      <div class="empty" id="empty" hidden>Nič nezodpovedá filtru.</div>
+      <div class="empty" id="empty" hidden>Takú zákazku tu nemáme. Skúste iné slovo alebo zrušte filter.</div>
     </div>
   </section>
 
   <section class="board" id="board-view" hidden aria-label="Nástenka"></section>
+  <p class="tah"><span class="tah--pc">Kartu potiahnite do iného stĺpca a zmení sa jej stav. Keď na ňu kliknete, otvorí sa celá.</span><span class="tah--mob">Ťuknite na kartu, otvorí sa a stav zmeníte v nej.</span></p>
 
-  <div class="pozn"><b>V toolke na mieru:</b> beží na serveri, takže do nej pozerá celá firma naraz z počítača aj z mobilu na montáži, s fotkami k zákazke, tlačou denného rozpisu a exportom hotových zákaziek pre fakturáciu. <button class="btn btn--sm" id="reset" type="button" style="margin-left:8px">Obnoviť ukážkové dáta</button></div>
+  <p class="reset-r"><button class="btn btn--sm" id="reset" type="button">Vrátiť ukážku na začiatok</button></p>
 </main>
 
-<dialog id="dlg">
+<footer class="koniec" aria-labelledby="h-koniec">
+  <div class="wrap koniec__in">
+    <h2 id="h-koniec">Program na vaše zákazky</h2>
+    <p>Váš program pobeží na serveri, takže doň bude pozerať celá firma naraz, z&nbsp;počítača aj z&nbsp;mobilu. Pribudne v&nbsp;ňom aj denný rozpis na tlač a&nbsp;zoznam hotových zákaziek na fakturáciu.</p>
+    <p>Stojí 990&nbsp;€ a&nbsp;server 60&nbsp;€ na rok. Polovicu z&nbsp;990&nbsp;€ zaplatíte pri objednávke a&nbsp;zvyšok pri odovzdaní.</p>
+    <div class="row">
+      <a class="btn btn--p" href="../../?co=zakazky#kontakt">Napíšte mi</a>
+      <a class="btn" href="../../?co=zakazky#p-zakazky">Späť na rutino.online</a>
+    </div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlg-h">
   <form method="dialog" id="frm">
     <h2 id="dlg-h">Zákazka</h2>
     <div class="grid2">
       <div class="f"><label for="e-cislo">Číslo</label><input id="e-cislo" readonly></div>
       <div class="f"><label for="e-stav">Stav</label><select id="e-stav"><option value="nova">Nová</option><option value="plan">Naplánovaná</option><option value="praca">Rozpracovaná</option><option value="hotova">Hotová</option><option value="fakt">Fakturovaná</option></select></div>
-      <div class="f"><label for="e-zak">Zákazník</label><input id="e-zak" required></div>
-      <div class="f"><label for="e-tel">Telefón</label><input id="e-tel"></div>
-      <div class="f f--wide"><label for="e-adr">Adresa</label><input id="e-adr"></div>
-      <div class="f f--wide"><label for="e-pop">Popis práce</label><textarea id="e-pop" rows="2"></textarea></div>
-      <div class="f"><label for="e-tech">Technik</label><input id="e-tech" list="tech-list"><datalist id="tech-list"></datalist></div>
-      <div class="f"><label for="e-term">Termín</label><input id="e-term" type="date"></div>
-      <div class="f"><label for="e-cena">Cena bez DPH v €</label><input id="e-cena" type="number" step="0.01" min="0"></div>
-      <div class="f"><label for="e-pozn">Poznámka</label><input id="e-pozn"></div>
+      <div class="f"><label for="e-zak">Zákazník</label><input id="e-zak" required autocomplete="off"></div>
+      <div class="f"><label for="e-kon">Kontaktná osoba</label><input id="e-kon" autocomplete="off"></div>
+      <div class="f f--wide"><label for="e-pop">Popis zákazky</label><textarea id="e-pop" rows="2"></textarea></div>
+      <div class="f"><label for="e-mn">Množstvo</label><input id="e-mn" autocomplete="off"></div>
+      <div class="f"><label for="e-tech">Kto na nej robí</label><input id="e-tech" list="tech-list" autocomplete="off"><datalist id="tech-list"></datalist></div>
+      <div class="f"><label for="e-term">Termín odovzdania</label><input id="e-term" type="date"></div>
+      <div class="f"><label for="e-cena">Cena bez DPH v €</label><input id="e-cena" type="number" step="0.01" min="0" inputmode="decimal"></div>
+      <div class="f f--wide"><label for="e-pozn">Poznámka</label><input id="e-pozn" autocomplete="off"></div>
     </div>
     <div class="dlg-akcie">
       <button type="button" class="btn del" id="e-del">Zmazať</button>
       <button type="button" class="btn" id="e-cancel">Zrušiť</button>
-      <button type="submit" class="btn btn--acc">Uložiť</button>
+      <button type="submit" class="btn btn--p">Uložiť</button>
     </div>
   </form>
 </dialog>
@@ -207,50 +334,65 @@ dialog h2{font-size:1.3rem}
 (function(){
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
-  var K = "evidencia-ukazka";
   var STAVY = {nova:"Nová", plan:"Naplánovaná", praca:"Rozpracovaná", hotova:"Hotová", fakt:"Fakturovaná"};
+  var PORADIE = Object.keys(STAVY);
+  var STROP = 12;   // ukážka udrží najviac 12 zákaziek
   var pad = function(n){ return n < 10 ? "0" + n : "" + n; };
   function iso(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-  function skD(s){ if (!s) return ""; var p = s.split("-"); return p[2] + ". " + p[1] + ". " + p[0]; }
+  function skD(s){ if (!s) return ""; var p = s.split("-"); return p[2] + ".\u00a0" + p[1] + ".\u00a0" + p[0]; }
   var dnes = new Date(); var DNES = iso(dnes);
   function odDnes(n){ return iso(new Date(dnes.getFullYear(), dnes.getMonth(), dnes.getDate() + n)); }
+  /* hotové zákazky ostanú vždy v tomto mesiaci, aby súčet hore nezávisel od toho, ktorý deň ukážku otvoríte */
+  function vMesiaci(n){ var d = new Date(dnes.getFullYear(), dnes.getMonth(), dnes.getDate() - n), prvy = new Date(dnes.getFullYear(), dnes.getMonth(), 1); return iso(d < prvy ? prvy : d); }
   var eur = new Intl.NumberFormat("sk-SK", {style:"currency", currency:"EUR", maximumFractionDigits:0});
 
-  /* ukážkové dáta: termíny sa počítajú od dnešného dňa, aby ukážka nikdy nevyzerala staro */
+  /* ukážkové dáta vymyslenej Tlačiarne Bodka: termíny sa počítajú od dnešného dňa, aby ukážka nikdy nevyzerala staro */
   function vzor(){ return [
-    {cislo:"Z-2026-061", zakaznik:"Peter Novák", tel:"0900 111 222", adresa:"Hlboká 4, Trnava", popis:"Montáž nástennej klimatizácie 3,5 kW, obývačka", technik:"Marek", termin:odDnes(0), stav:"plan", cena:1080, pozn:"parkovanie vo dvore"},
-    {cislo:"Z-2026-062", zakaznik:"Bistro U Zity", tel:"0900 333 444", adresa:"Hlavná 12, Piešťany", popis:"Servis 2 jednotiek, čistenie a kontrola chladiva", technik:"Jana", termin:odDnes(0), stav:"plan", cena:230, pozn:"po 14:00, obed"},
-    {cislo:"Z-2026-058", zakaznik:"Kaderníctvo Lenka", tel:"0900 555 666", adresa:"Štefánikova 3, Trnava", popis:"Jednotka nechladí, chybový kód E5", technik:"Marek", termin:odDnes(-1), stav:"praca", cena:150, pozn:"čaká sa na diel"},
-    {cislo:"Z-2026-063", zakaznik:"Martin Horváth", tel:"0900 777 888", adresa:"Družstevná 21, Hlohovec", popis:"Multisplit pre 2 spálne, obhliadka a ponuka", technik:"", termin:odDnes(2), stav:"nova", cena:0, pozn:""},
-    {cislo:"Z-2026-055", zakaznik:"Lekáreň Alfa", tel:"0900 999 000", adresa:"Nám. slobody 8, Sereď", popis:"Výmena 2 vonkajších jednotiek", technik:"Jana", termin:odDnes(-4), stav:"hotova", cena:2360, pozn:"faktúru poslať na účtovníctvo"},
-    {cislo:"Z-2026-057", zakaznik:"Rodinný dom Kováčová", tel:"0900 121 212", adresa:"Lipová 6, Kováčová pri Trnave", popis:"Montáž 2 jednotiek, dlhšia trasa 8 m", technik:"Marek", termin:odDnes(-3), stav:"hotova", cena:1990, pozn:""},
-    {cislo:"Z-2026-050", zakaznik:"Autoservis Bruno", tel:"0900 343 434", adresa:"Priemyselná 2, Trnava", popis:"Ročný servis 4 jednotiek v dielni", technik:"Jana", termin:odDnes(-9), stav:"fakt", cena:320, pozn:"zaplatené"},
-    {cislo:"Z-2026-064", zakaznik:"Ing. Eva Šimková", tel:"0900 565 656", adresa:"Ružová 15, Trnava", popis:"Klimatizácia do podkrovia, 5 kW", technik:"Marek", termin:odDnes(4), stav:"plan", cena:1310, pozn:"kľúče u susedy"},
-    {cislo:"Z-2026-065", zakaznik:"Penzión Slnko", tel:"0900 787 878", adresa:"Kúpeľná 1, Piešťany", popis:"Cenová ponuka na 6 izieb", technik:"", termin:odDnes(6), stav:"nova", cena:0, pozn:"poslať ponuku do piatka"}
+    {cislo:"Z-2026-141", zakaznik:"Kaviareň Pod Lipou", kontakt:"Mária Kováčová", popis:"Letáky A5 na jesennú ponuku, obojstranne, lesklý papier", mnozstvo:"2\u00a0000\u00a0ks", kto:"Tomáš", termin:odDnes(0), stav:"plan", cena:186, pozn:"vyzdvihnú si osobne"},
+    {cislo:"Z-2026-142", zakaznik:"Autoservis Brzda", kontakt:"Ján Hudák", popis:"Vizitky pre štyroch ľudí, matné", mnozstvo:"4\u00a0×\u00a0250\u00a0ks", kto:"Tomáš", termin:odDnes(0), stav:"plan", cena:96, pozn:"mená a funkcie poslali mailom"},
+    {cislo:"Z-2026-138", zakaznik:"Hotel Zátoka", kontakt:"Petra Šimková", popis:"Katalóg izieb a služieb, 24 strán, šitý", mnozstvo:"300\u00a0ks", kto:"Zuzana", termin:odDnes(0), stav:"praca", cena:1140, pozn:"posledná korektúra do obeda"},
+    {cislo:"Z-2026-137", zakaznik:"Účtovná kancelária Saldo", kontakt:"Juraj Mráz", popis:"Hlavičkový papier a obálky DL s logom", mnozstvo:"1\u00a0000 + 500\u00a0ks", kto:"Zuzana", termin:odDnes(-2), stav:"plan", cena:238, pozn:"čakáme, kým schvália návrh"},
+    {cislo:"Z-2026-143", zakaznik:"Fitnes Kotva", kontakt:"Michal Baláž", popis:"Roll-up 85\u00a0×\u00a0200\u00a0cm s taškou", mnozstvo:"2\u00a0ks", kto:"", termin:odDnes(3), stav:"nova", cena:0, pozn:"logo pošlú v krivkách"},
+    {cislo:"Z-2026-144", zakaznik:"Zubná ambulancia Úsmev", kontakt:"Ivana Tóthová", popis:"Objednávacie kartičky a plagát A2 do čakárne", mnozstvo:"1\u00a0000 + 5\u00a0ks", kto:"Lucia", termin:odDnes(5), stav:"nova", cena:0, pozn:"poslať cenovú ponuku do piatka"},
+    {cislo:"Z-2026-135", zakaznik:"Kvetinárstvo Margaréta", kontakt:"Eva Horváthová", popis:"Polep výkladu rezanou fóliou, otváracie hodiny a logo", mnozstvo:"2\u00a0okná", kto:"Tomáš", termin:vMesiaci(3), stav:"hotova", cena:385, pozn:"nalepené, fotky poslané"},
+    {cislo:"Z-2026-136", zakaznik:"Stavebniny Kocka", kontakt:"Róbert Ďurica", popis:"Stolové kalendáre na rok 2027 s logom", mnozstvo:"150\u00a0ks", kto:"Tomáš", termin:vMesiaci(5), stav:"hotova", cena:1050, pozn:"odvezie kuriér"},
+    {cislo:"Z-2026-130", zakaznik:"Vinárstvo Pod Hájom", kontakt:"Martina Vargová", popis:"Pozvánky na degustáciu so zlatou fóliou", mnozstvo:"400\u00a0ks", kto:"Zuzana", termin:vMesiaci(8), stav:"fakt", cena:290, pozn:"zaplatené"}
   ]; }
 
   var stav = nacitaj();
-  function nacitaj(){ return {zak: vzor(), poradie: 66}; }
-  function uloz(){ /* ukážka nič neukladá, vaša toolka beží na serveri a pamätá si všetko */ }
+  function nacitaj(){ return {zak: vzor(), poradie: 145}; }
+  function uloz(){ /* ukážka nič neukladá, váš program beží na serveri a pamätá si všetko */ }
 
   var sortBy = "termin", view = "tab";
 
-  function technici(){ var t = {}; stav.zak.forEach(function(z){ if (z.technik) t[z.technik] = 1; }); return Object.keys(t).sort(); }
+  function ludia(){ var t = {}; stav.zak.forEach(function(z){ if (z.kto) t[z.kto] = 1; }); return Object.keys(t).sort(function(a,b){ return a.localeCompare(b, "sk"); }); }
+  /* hotové a fakturované zákazky sú vybavené: pri zoradení podľa termínu idú na koniec, hore je to, čo horí */
+  function vybavena(z){ return z.stav === "hotova" || z.stav === "fakt"; }
+  function porovnaj(a, b){
+    var x = a[sortBy], y = b[sortBy];
+    if (sortBy === "termin") return (vybavena(a) - vybavena(b)) || (vybavena(a) && PORADIE.indexOf(a.stav) - PORADIE.indexOf(b.stav)) || a.termin.localeCompare(b.termin);
+    if (sortBy === "cena") return (y || 0) - (x || 0);
+    if (sortBy === "stav") return PORADIE.indexOf(x) - PORADIE.indexOf(y) || a.termin.localeCompare(b.termin);
+    if (!x && y) return 1;      // zákazky bez človeka idú na koniec
+    if (x && !y) return -1;
+    return String(x).localeCompare(String(y), "sk") || a.termin.localeCompare(b.termin);
+  }
   function filtrovane(){
     var q = $("q").value.toLowerCase().trim(), fs = $("f-stav").value, ft = $("f-tech").value;
     return stav.zak.filter(function(z){
       if (fs && z.stav !== fs) return false;
-      if (ft && z.technik !== ft) return false;
-      if (q && (z.zakaznik + " " + z.adresa + " " + z.popis + " " + z.cislo + " " + z.pozn).toLowerCase().indexOf(q) < 0) return false;
+      if (ft && z.kto !== ft) return false;
+      if (q && [z.zakaznik, z.kontakt, z.popis, z.mnozstvo, z.cislo, z.pozn, z.kto].join(" ").toLowerCase().indexOf(q) < 0) return false;
       return true;
-    }).sort(function(a,b){ var x = a[sortBy], y = b[sortBy]; if (typeof x === "number") return y - x; return String(x).localeCompare(String(y), "sk"); });
+    }).sort(porovnaj);
   }
+  function poTermine(z){ return z.termin < DNES && (z.stav === "nova" || z.stav === "plan"); }
 
   function kresli(){
-    // technici do filtra a datalistu
-    var t = technici(), sel = $("f-tech"), cur = sel.value;
-    sel.innerHTML = '<option value="">Všetci technici</option>' + t.map(function(x){ return '<option' + (x===cur ? ' selected' : '') + '>' + x + '</option>'; }).join("");
-    $("tech-list").innerHTML = t.map(function(x){ return '<option value="' + x + '">'; }).join("");
+    // ľudia do filtra a do ponuky v dialógu
+    var t = ludia(), sel = $("f-tech"), cur = sel.value;
+    sel.innerHTML = '<option value="">Všetci ľudia</option>' + t.map(function(x){ return '<option' + (x===cur ? ' selected' : '') + '>' + esc(x) + '</option>'; }).join("");
+    $("tech-list").innerHTML = t.map(function(x){ return '<option value="' + esc(x) + '">'; }).join("");
     // čísla hore
     var open = 0, dnesN = 0, fakt = 0, mesiac = 0, m = DNES.slice(0,7);
     stav.zak.forEach(function(z){
@@ -260,71 +402,100 @@ dialog h2{font-size:1.3rem}
       if ((z.stav === "hotova" || z.stav === "fakt") && z.termin.slice(0,7) === m) mesiac += z.cena || 0;
     });
     $("st-open").textContent = open; $("st-dnes").textContent = dnesN; $("st-fakt").textContent = fakt; $("st-mesiac").textContent = eur.format(mesiac);
+    /* súhrn je veta: tvary podľa čísla (1 otvorená zákazka, 2 až 4 otvorené zákazky, 5 a viac otvorených zákaziek) */
+    $("st-open-t").textContent = open === 1 ? "otvorená zákazka" : open >= 2 && open <= 4 ? "otvorené zákazky" : "otvorených zákaziek";
+    $("st-fakt-t").textContent = fakt >= 2 && fakt <= 4 ? "čakajú na faktúru" : "čaká na faktúru";
 
     var list = filtrovane();
     if (view === "tab"){
       var html = "";
       list.forEach(function(z){
-        var i = stav.zak.indexOf(z);
-        var late = z.termin < DNES && (z.stav === "nova" || z.stav === "plan");
-        html += '<tr><td class="c">' + z.cislo + '</td><td><b>' + esc(z.zakaznik) + '</b><br><small style="color:var(--muted)">' + esc(z.tel) + '</small></td><td>' + esc(z.adresa) + '</td><td><span class="pop" title="' + esc(z.popis) + '">' + esc(z.popis) + '</span></td><td>' + (esc(z.technik) || '<span style="color:var(--muted)">nepriradený</span>') + '</td><td class="d' + (late ? ' late' : '') + '">' + skD(z.termin) + '</td>' +
-          '<td><select class="st" data-st="' + i + '" aria-label="Stav">' + Object.keys(STAVY).map(function(k){ return '<option value="' + k + '"' + (k===z.stav ? ' selected' : '') + '>' + STAVY[k] + '</option>'; }).join("") + '</select></td>' +
-          '<td class="num">' + (z.cena ? eur.format(z.cena) : '<span style="color:var(--muted)">bez ceny</span>') + '</td><td class="akc"><button type="button" data-edit="' + i + '">Upraviť</button></td></tr>';
+        var i = stav.zak.indexOf(z), late = poTermine(z);
+        html += '<tr><td class="c">' + esc(z.cislo) + '</td>' +
+          '<td><b>' + esc(z.zakaznik) + '</b>' + (z.kontakt ? '<span class="kon">' + esc(z.kontakt) + '</span>' : '') + '</td>' +
+          '<td><span class="pop" title="' + esc(z.popis) + '">' + nb(esc(z.popis)) + '</span></td>' +
+          '<td class="mn">' + (esc(z.mnozstvo) || '<span class="ticho">neuvedené</span>') + '</td>' +
+          '<td>' + (esc(z.kto) || '<span class="ticho">zatiaľ nikto</span>') + '</td>' +
+          '<td class="d' + (late ? ' late' : '') + '">' + skD(z.termin) + (late ? '<small>po termíne</small>' : '') + '</td>' +
+          '<td><select class="st s-' + z.stav + '" data-st="' + i + '" aria-label="Stav zákazky ' + esc(z.cislo) + '">' + PORADIE.map(function(k){ return '<option value="' + k + '"' + (k===z.stav ? ' selected' : '') + '>' + STAVY[k] + '</option>'; }).join("") + '</select></td>' +
+          '<td class="num">' + (z.cena ? eur.format(z.cena) : '<span class="ticho">bez ceny</span>') + '</td>' +
+          '<td class="akc"><button type="button" data-edit="' + i + '">Upraviť</button></td></tr>';
       });
       $("rows").innerHTML = html; $("empty").hidden = list.length > 0;
     } else {
       var cols = "";
-      Object.keys(STAVY).forEach(function(k){
+      PORADIE.forEach(function(k){
         var items = list.filter(function(z){ return z.stav === k; });
-        cols += '<div class="col" data-col="' + k + '"><h3>' + STAVY[k] + '<span>' + items.length + '</span></h3>' + items.map(function(z){
-          var i = stav.zak.indexOf(z);
-          return '<div class="card s-' + k + '" draggable="true" data-edit="' + i + '" data-drag="' + i + '"><b>' + esc(z.zakaznik) + '</b><span>' + esc(z.popis) + '</span><small>' + skD(z.termin) + (z.technik ? ' · ' + esc(z.technik) : '') + (z.cena ? ' · ' + eur.format(z.cena) : '') + '</small></div>';
+        cols += '<div class="col" data-col="' + k + '"><h3>' + STAVY[k] + ' <span>' + items.length + '</span></h3>' + items.map(function(z){
+          var i = stav.zak.indexOf(z), late = poTermine(z);
+          return '<div class="card s-' + k + '" draggable="true" tabindex="0" role="button" data-edit="' + i + '" data-drag="' + i + '"><b>' + esc(z.zakaznik) + '</b><span>' + nb(esc(z.popis)) + (z.mnozstvo ? ', ' + esc(z.mnozstvo) : '') + '</span>' +
+            '<small><span' + (late ? ' class="late"' : '') + '>' + skD(z.termin) + (late ? ' po termíne' : '') + '</span>' + (z.kto ? '<span>' + esc(z.kto) + '</span>' : '') + (z.cena ? '<span>' + eur.format(z.cena) + '</span>' : '') + '</small></div>';
         }).join("") + '</div>';
       });
       $("board-view").innerHTML = cols;
     }
   }
+  /* jednopísmenové predložky a spojky nenechať na konci riadka */
+  function nb(s){ return s.replace(/(^|\s)([aikosuvzAIKOSUVZ]) /g, "$1$2\u00a0"); }
   function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 
   /* ---------- udalosti ---------- */
   ["q","f-stav","f-tech"].forEach(function(id){ $(id).addEventListener("input", kresli); });
-  document.querySelector("thead").addEventListener("click", function(e){ var th = e.target.closest("th[data-s]"); if (!th) return; sortBy = th.dataset.s; document.querySelectorAll("th").forEach(function(x){ x.classList.toggle("sorted", x === th); }); kresli(); });
+  function zorad(th){
+    sortBy = th.dataset.s;
+    document.querySelectorAll("th").forEach(function(x){ var je = x === th; x.classList.toggle("sorted", je); if (je) x.setAttribute("aria-sort", sortBy === "cena" ? "descending" : "ascending"); else x.removeAttribute("aria-sort"); });
+    kresli();
+  }
+  var hlavicka = document.querySelector("thead");
+  hlavicka.addEventListener("click", function(e){ var th = e.target.closest("th[data-s]"); if (th) zorad(th); });
+  hlavicka.addEventListener("keydown", function(e){ var th = e.target.closest("th[data-s]"); if (th && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); zorad(th); } });
   $("rows").addEventListener("change", function(e){ var s = e.target.closest("[data-st]"); if (!s) return; stav.zak[+s.dataset.st].stav = s.value; uloz(); kresli(); });
   document.addEventListener("click", function(e){ var b = e.target.closest("[data-edit]"); if (b) otvor(+b.dataset.edit); });
-  $("v-tab").addEventListener("click", function(){ view = "tab"; $("v-tab").classList.add("is-on"); $("v-board").classList.remove("is-on"); $("tab-view").hidden = false; $("board-view").hidden = true; kresli(); });
-  $("v-board").addEventListener("click", function(){ view = "board"; $("v-board").classList.add("is-on"); $("v-tab").classList.remove("is-on"); $("tab-view").hidden = true; $("board-view").hidden = false; kresli(); });
+  $("board-view").addEventListener("keydown", function(e){ var c = e.target.closest(".card[data-edit]"); if (c && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); otvor(+c.dataset.edit); } });
+  function prepni(na){
+    view = na;
+    $("v-tab").classList.toggle("is-on", na === "tab"); $("v-tab").setAttribute("aria-pressed", na === "tab");
+    $("v-board").classList.toggle("is-on", na === "board"); $("v-board").setAttribute("aria-pressed", na === "board");
+    $("tab-view").hidden = na !== "tab"; $("board-view").hidden = na !== "board";
+    kresli();
+  }
+  $("v-tab").addEventListener("click", function(){ prepni("tab"); });
+  $("v-board").addEventListener("click", function(){ prepni("board"); });
 
   // presúvanie kariet medzi stĺpcami
-  var drag = null;
-  $("board-view").addEventListener("dragstart", function(e){ var c = e.target.closest("[data-drag]"); if (!c) return; drag = +c.dataset.drag; e.dataTransfer.effectAllowed = "move"; });
-  $("board-view").addEventListener("dragover", function(e){ var col = e.target.closest("[data-col]"); if (!col) return; e.preventDefault(); });
-  $("board-view").addEventListener("drop", function(e){ var col = e.target.closest("[data-col]"); if (!col || drag == null) return; e.preventDefault(); stav.zak[drag].stav = col.dataset.col; drag = null; uloz(); kresli(); });
+  var drag = null, ciel = null;
+  function oznac(col){ if (ciel && ciel !== col) ciel.classList.remove("is-ciel"); ciel = col; if (col) col.classList.add("is-ciel"); }
+  $("board-view").addEventListener("dragstart", function(e){ var c = e.target.closest("[data-drag]"); if (!c) return; drag = +c.dataset.drag; e.dataTransfer.effectAllowed = "move"; c.classList.add("is-tahane"); });
+  $("board-view").addEventListener("dragover", function(e){ var col = e.target.closest("[data-col]"); oznac(col); if (col) e.preventDefault(); });
+  $("board-view").addEventListener("drop", function(e){ var col = e.target.closest("[data-col]"); oznac(null); if (!col || drag == null) return; e.preventDefault(); stav.zak[drag].stav = col.dataset.col; drag = null; uloz(); kresli(); });
+  $("board-view").addEventListener("dragend", function(e){ oznac(null); drag = null; var c = e.target.closest("[data-drag]"); if (c) c.classList.remove("is-tahane"); });
 
   /* ---------- dialóg ---------- */
   var editIdx = -1;
   function otvor(i){
-    editIdx = i; var z = i > -1 ? stav.zak[i] : {cislo:"Z-" + dnes.getFullYear() + "-" + String(stav.poradie).padStart(3,"0"), zakaznik:"", tel:"", adresa:"", popis:"", technik:"", termin:DNES, stav:"nova", cena:"", pozn:""};
+    if (i < 0 && stav.zak.length >= STROP){ toast("V ukážke sa zmestí najviac 12 zákaziek. Váš program taký strop mať nebude."); return; }
+    editIdx = i; var z = i > -1 ? stav.zak[i] : {cislo:"Z-" + dnes.getFullYear() + "-" + String(stav.poradie).padStart(3,"0"), zakaznik:"", kontakt:"", popis:"", mnozstvo:"", kto:"", termin:DNES, stav:"nova", cena:"", pozn:""};
     $("dlg-h").textContent = i > -1 ? "Zákazka " + z.cislo : "Nová zákazka";
-    $("e-cislo").value = z.cislo; $("e-stav").value = z.stav; $("e-zak").value = z.zakaznik; $("e-tel").value = z.tel; $("e-adr").value = z.adresa; $("e-pop").value = z.popis; $("e-tech").value = z.technik; $("e-term").value = z.termin; $("e-cena").value = z.cena || ""; $("e-pozn").value = z.pozn;
+    $("e-cislo").value = z.cislo; $("e-stav").value = z.stav; $("e-zak").value = z.zakaznik; $("e-kon").value = z.kontakt; $("e-pop").value = z.popis; $("e-mn").value = z.mnozstvo; $("e-tech").value = z.kto; $("e-term").value = z.termin; $("e-cena").value = z.cena || ""; $("e-pozn").value = z.pozn;
     $("e-del").hidden = i < 0;
     $("dlg").showModal(); $("e-zak").focus();
   }
   $("nova").addEventListener("click", function(){ otvor(-1); });
   $("e-cancel").addEventListener("click", function(){ $("dlg").close(); });
-  $("e-del").addEventListener("click", function(){ if (editIdx > -1 && confirm("Zmazať túto zákazku?")){ stav.zak.splice(editIdx,1); uloz(); kresli(); } $("dlg").close(); });
+  $("e-del").addEventListener("click", function(){ if (editIdx > -1 && confirm("Naozaj zmazať túto zákazku?")){ stav.zak.splice(editIdx,1); uloz(); kresli(); toast("Zákazka je zmazaná"); } $("dlg").close(); });
   $("frm").addEventListener("submit", function(e){
     e.preventDefault();
-    var z = {cislo:$("e-cislo").value, stav:$("e-stav").value, zakaznik:$("e-zak").value.trim(), tel:$("e-tel").value.trim(), adresa:$("e-adr").value.trim(), popis:$("e-pop").value.trim(), technik:$("e-tech").value.trim(), termin:$("e-term").value || DNES, cena:parseFloat($("e-cena").value) || 0, pozn:$("e-pozn").value.trim()};
+    var z = {cislo:$("e-cislo").value, stav:$("e-stav").value, zakaznik:$("e-zak").value.trim(), kontakt:$("e-kon").value.trim(), popis:$("e-pop").value.trim(), mnozstvo:$("e-mn").value.trim(), kto:$("e-tech").value.trim(), termin:$("e-term").value || DNES, cena:parseFloat($("e-cena").value) || 0, pozn:$("e-pozn").value.trim()};
     if (!z.zakaznik) return;
     if (editIdx > -1) stav.zak[editIdx] = z;
-    else { if (stav.zak.length >= 12){ $("dlg").close(); toast("V ukážke sa zmestí 12 zákaziek, plná toolka nemá limit"); return; } stav.zak.push(z); stav.poradie++; }
-    uloz(); kresli(); $("dlg").close(); toast("Uložené");
+    else { if (stav.zak.length >= STROP){ $("dlg").close(); toast("V ukážke sa zmestí najviac 12 zákaziek. Váš program taký strop mať nebude."); return; } stav.zak.push(z); stav.poradie++; }
+    uloz(); kresli(); $("dlg").close(); toast("Zákazka je zapísaná");
   });
 
-  /* ---------- výstupy ---------- */
-  $("reset").addEventListener("click", function(){ stav = {zak: vzor(), poradie: 66}; uloz(); kresli(); toast("Ukážkové dáta obnovené"); });
+  /* ---------- späť na začiatok ---------- */
+  $("reset").addEventListener("click", function(){ stav = nacitaj(); uloz(); kresli(); toast("Ukážka je znova na začiatku"); });
 
-  var tt; function toast(m){ var t = $("toast"); t.textContent = m; t.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("is-on"); }, 2200); }
+  var tt; function toast(m){ var t = $("toast"); t.textContent = m; t.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(function(){ t.classList.remove("is-on"); }, 2600); }
   kresli();
 })();
 </script>

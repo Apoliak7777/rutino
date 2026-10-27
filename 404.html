@@ -5,50 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stránka sa nenašla: Rutino</title>
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F8F7F4">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141416">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0B6A3D">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230B6A3D'/%3E%3Ctext x='32' y='47' font-family='Arial,sans-serif' font-weight='700' font-size='46' text-anchor='middle' fill='%23ffffff'%3Er%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="/fonts/funnel-display-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/funnel-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* 404 sa zobrazuje na ľubovoľnej adrese, preto sú cesty k písmam aj odkazy absolútne na doménu. */
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('https://rutino.online/fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('https://rutino.online/fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('https://rutino.online/fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('https://rutino.online/fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+/* 404 sa zobrazuje na ľubovoľnej adrese (aj /ukazky/nieco/ine), preto sú písma aj odkazy od koreňa webu: /fonts/, /#kontakt.
+   Na rutino.online aj www.rutino.online je to vždy tá istá doména, nič sa nenačítava zvonka.
+   Písma ako na hlavnej stránke: Funnel Display (nadpis) a Funnel Sans (text), SIL OFL 1.1. Farby podľa STAVBA.md: zelená = Rutino. */
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("/fonts/funnel-display-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("/fonts/funnel-display-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("/fonts/funnel-sans-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("/fonts/funnel-sans-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
 :root{
-  color-scheme:light dark;
-  --bg:#F8F7F4; --surface:#FFFFFF; --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74; --line:rgba(21,21,23,.13); --acc:#C2410C; --acc-hover:#A33608; --acc-ink:#FFFFFF;
-  --display:"Newsreader",Georgia,"Times New Roman",serif; --body:"Manrope","Segoe UI",system-ui,sans-serif; --ease:cubic-bezier(.32,.72,0,1);
-}
-@media (prefers-color-scheme:dark){
-  :root{--bg:#141416; --surface:#1D1D20; --ink:#EDEBE6; --ink-2:#C9C7C1; --muted:#9A9893; --line:rgba(237,235,230,.15); --acc:#F4A27A; --acc-hover:#F8B896; --acc-ink:#2A1206}
+  --zel:#0B6A3D;            /* plocha Rutino, biely text 6,7 : 1 */
+  --zel-h:#08552F;          /* hover */
+  --zel-j:#E3F0E8;          /* jemná zelená, na zelenej 5,7 : 1 */
+  --cie:#12251A;            /* text na bielej */
+  --siv:#4A5A50;            /* menej dôležitý text na bielej 7,3 : 1 */
+  --ciara:#D5DBD7;
+  --disp:"Funnel Display",Arial,sans-serif;
+  --text:"Funnel Sans",Arial,sans-serif;
+  --okraj:clamp(16px,4vw,56px);
+  --r:3px;
 }
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:32px 20px;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6}
-main{max-width:520px}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
-.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:500;font-size:1.1rem;letter-spacing:-.01em;margin-bottom:40px}
-.brand i{width:26px;height:26px;border-radius:6px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.95rem}
-.code{font-family:var(--display);font-weight:500;font-size:clamp(4.5rem,16vw,8rem);line-height:.9;letter-spacing:-.05em;margin:0;color:var(--acc)}
-h1{font-family:var(--display);font-weight:500;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:-.022em;line-height:1.1;margin:18px 0 0;text-wrap:balance}
-p{color:var(--ink-2);margin:14px 0 0;max-width:44ch;text-wrap:pretty}
-.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.cta{display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.96rem;padding:13px 22px;border-radius:6px;border:1px solid transparent;text-decoration:none;white-space:nowrap;background:var(--acc);color:var(--acc-ink);transition:background-color .3s var(--ease),transform .3s var(--ease),border-color .3s var(--ease)}
-.cta:hover{background:var(--acc-hover);transform:translateY(-1px)}
-.cta--line{background:transparent;color:var(--ink);border-color:var(--line)}
-.cta--line:hover{background:transparent;border-color:var(--ink)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;display:grid;grid-template-rows:1fr auto;background:#fff;color:var(--cie);font-family:var(--text);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+p{margin:0}
+a{color:inherit;text-underline-offset:.18em;text-decoration-thickness:2px}
+.wrap{width:min(100% - 2 * var(--okraj), 1328px);margin-inline:auto}
+
+/* zelená plocha cez celú obrazovku: značka, jedna veľká veta, dve cesty ďalej */
+.zel{display:flex;flex-direction:column;background:var(--zel);color:#fff}
+.zel :focus-visible{outline:3px solid #fff;outline-offset:4px}
+.hlav{display:flex;align-items:center;min-height:84px}
+.logo{display:inline-flex;align-items:center;min-height:44px;font:600 31px/1 var(--disp);letter-spacing:-.035em;text-decoration:none}
+.hl{flex:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(32px,8vh,96px) 0 clamp(56px,10vh,120px)}
+h1{margin:0;max-width:10.5em;font:500 clamp(46px,8.4vw,124px)/.96 var(--disp);letter-spacing:-.032em;text-wrap:balance}
+.sub{margin-top:clamp(24px,3vw,36px);max-width:31em;font-size:clamp(19px,1.6vw,23px);line-height:1.42;text-wrap:pretty}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(28px,3vw,40px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 24px;border:2px solid #fff;border-radius:var(--r);font:600 17px/1.1 var(--text);text-decoration:none;white-space:nowrap;transition:background-color .15s,color .15s;touch-action:manipulation}
+.btn--p{background:#fff;color:var(--zel)}
+.btn--p:hover{background:var(--zel-j);border-color:var(--zel-j)}
+.btn--o{background:transparent;color:#fff}
+.btn--o:hover{background:#fff;color:var(--zel)}
+.adresa{display:none;margin-top:28px;font-size:16px;color:var(--zel-j);overflow-wrap:anywhere}
+.adresa b{font-weight:600;color:#fff}
+.js .adresa{display:block}
+
+/* pätička ako na hlavnej stránke: biela, zelená značka */
+.pata{padding:28px 0 34px;font-size:16px}
+.pata__r{display:flex;flex-wrap:wrap;align-items:center;gap:4px 28px}
+.pata .logo{font-size:26px;color:var(--zel)}
+.pata span{color:var(--siv)}
+.pata nav{display:flex;flex-wrap:wrap;gap:0 22px;margin-left:auto}
+.pata nav a{display:inline-flex;align-items:center;min-height:44px}
+.pata nav a:hover{color:var(--zel)}
+.pata :focus-visible{outline:3px solid var(--zel);outline-offset:3px}
+
+@media (max-width:599px){
+  body{font-size:17px}
+  .hlav{min-height:68px}
+  .logo{font-size:27px}
+  .hl{justify-content:flex-start;padding-top:24px}
+  h1{font-size:min(13vw,54px)}
+  .btn{flex:1 1 auto;padding:0 18px}
+  .pata nav{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important}
+}
 </style>
+<script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <main>
-    <a class="brand" href="https://rutino.online/"><i>R</i>Rutino</a>
-    <p class="code">404</p>
-    <h1>Táto stránka tu nie je</h1>
-    <p>Buď ste sa preklikli, alebo som ju presunul. Tri ukážky a cenník nájdete na hlavnej stránke.</p>
-    <div class="row">
-      <a class="cta" href="https://rutino.online/#ukazky">Pozrieť ukážky</a>
-      <a class="cta cta--line" href="mailto:info@rutino.online">Napísať mi</a>
+
+<div class="zel">
+  <header class="wrap hlav">
+    <a class="logo" href="/" aria-label="Rutino, na úvodnú stránku">rutino</a>
+  </header>
+
+  <main class="wrap hl">
+    <h1>Na tejto adrese nič nie je.</h1>
+    <p class="sub">Možno ste sa pri písaní adresy preklepli alebo som stránku medzitým presunul. Ukážky programov aj cenník nájdete na úvodnej stránke.</p>
+    <div class="cta">
+      <a class="btn btn--p" href="/">Na úvodnú stránku</a>
+      <a class="btn btn--o" href="/#kontakt">Napíšte mi</a>
     </div>
+    <p class="adresa">Chyba 404 na adrese <b id="cesta"></b></p>
   </main>
+</div>
+
+<footer class="pata">
+  <div class="wrap pata__r">
+    <a class="logo" href="/" aria-label="Rutino, na úvodnú stránku">rutino</a>
+    <span>Programy na mieru pre malé firmy</span>
+    <nav aria-label="Pätička">
+      <a href="mailto:info@rutino.online">info@rutino.online</a>
+      <a href="/ochrana-udajov.html">Ochrana údajov</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var el = document.getElementById("cesta");
+  if (!el) return;
+  var cesta = location.pathname || "/";
+  try { cesta = decodeURIComponent(cesta); } catch (e) { /* zlá adresa, ukáže sa, ako prišla */ }
+  el.textContent = cesta.length > 80 ? cesta.slice(0, 79) + "…" : cesta;
+})();
+</script>
 </body>
 </html>

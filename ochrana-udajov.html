@@ -5,114 +5,180 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ochrana údajov: Rutino</title>
 <meta name="description" content="Aké údaje dostanem, keď mi napíšete alebo pošlete podklady k programu, načo ich potrebujem a ako dlho ich mám.">
-<meta name="theme-color" content="#F8F7F4">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141416">
+<meta name="theme-color" content="#0B6A3D">
+<meta name="color-scheme" content="light">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230B6A3D'/%3E%3Ctext x='32' y='47' font-family='Arial,sans-serif' font-weight='700' font-size='46' text-anchor='middle' fill='%23ffffff'%3Er%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/funnel-display-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/funnel-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+/* Písma sú na disku (Funnel Display a Funnel Sans, SIL OFL 1.1), nič sa nenačítava z cudzej domény.
+   Vzhľad ako hlavná stránka: zelená plocha Rutina hore, dokument na bielej v jednom stĺpci na čítanie.
+   Text stránky mení len Alex; tu sa ladí iba vzhľad. */
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("fonts/funnel-display-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("fonts/funnel-display-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("fonts/funnel-sans-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("fonts/funnel-sans-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ---------- farby podľa STAVBA.md: zelená = Rutino, textové časti biele ---------- */
 :root{
-  color-scheme:light dark;
-  --bg:#F8F7F4; --surface:#FFFFFF; --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74;
-  --line:rgba(21,21,23,.13); --box-line:rgba(21,21,23,.08);
-  --acc:#C2410C; --acc-line:rgba(194,65,12,.35);
-  --shadow:0 1px 2px rgba(21,21,23,.06),0 24px 48px -28px rgba(21,21,23,.32);
-  --display:"Newsreader",Georgia,"Times New Roman",serif;
-  --body:"Manrope","Segoe UI",system-ui,sans-serif;
-  --ease:cubic-bezier(.32,.72,0,1);
-}
-@media (prefers-color-scheme:dark){
-  :root{--bg:#141416; --surface:#1D1D20; --ink:#EDEBE6; --ink-2:#C9C7C1; --muted:#9A9893;
-    --line:rgba(237,235,230,.15); --box-line:rgba(237,235,230,.10); --acc:#F4A27A; --acc-line:rgba(244,162,122,.4);
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 24px 48px -28px rgba(0,0,0,.8)}
+  --zel:#0B6A3D;            /* plocha Rutino, biely text 6,7 : 1; zelený text na bielej tiež 6,7 : 1 */
+  --zel-h:#08552F;          /* hover */
+  --zel-j:#E3F0E8;          /* jemná zelená na pozadie rady */
+  --cie:#12251A;            /* text na bielej 16 : 1 */
+  --siv:#4A5A50;            /* menej dôležitý text 7,3 : 1 */
+  --ciara:#D5DBD7;
+  --disp:"Funnel Display",Arial,sans-serif;
+  --text:"Funnel Sans",Arial,sans-serif;
+  --okraj:clamp(16px,4vw,56px);
+  --r:3px;
 }
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:clamp(15.5px,.3vw + 14.5px,17px);line-height:1.65}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
-.shell{max-width:760px;margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
-.top{display:flex;align-items:center;justify-content:space-between;height:72px;gap:18px}
-.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:500;font-size:1.06rem;letter-spacing:-.01em}
-.brand i{width:26px;height:26px;border-radius:6px;background:var(--acc);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.95rem}
-.back{font-size:.92rem;font-weight:600;color:var(--ink-2);text-decoration:none;transition:color .25s var(--ease)}
-.back:hover{color:var(--ink)}
-h1{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,5vw,2.6rem);letter-spacing:-.022em;line-height:1.08;margin:clamp(36px,6vw,64px) 0 0;text-wrap:balance}
-.sub{color:var(--ink-2);margin:16px 0 0;text-wrap:pretty}
-h2{font-family:var(--display);font-weight:500;font-size:1.15rem;letter-spacing:-.01em;margin:40px 0 10px}
-p,ul{margin:0 0 14px;color:var(--ink-2)}
-ul{padding-left:20px}
-li{margin-bottom:6px}
-strong{font-weight:700;color:var(--ink)}
-.box{border:1px solid var(--box-line);border-radius:8px;background:var(--surface);box-shadow:var(--shadow);padding:22px 24px;margin:34px 0 0}
-.box p{margin:0 0 6px}
-.box p:last-child{margin:0}
-main a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--acc-line);transition:border-color .25s var(--ease)}
-main a:hover{border-color:var(--acc)}
-.date{font-size:.88rem;color:var(--muted);margin-top:34px}
-.foot{border-top:1px solid var(--line);margin-top:56px;padding-block:26px 44px;font-size:.88rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px 24px}
-.foot a{text-decoration:none;color:var(--ink-2)}
-.foot a:hover{color:var(--ink)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--cie);font-family:var(--text);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-underline-offset:.18em;text-decoration-thickness:2px}
+.wrap{width:min(100% - 2 * var(--okraj), 1328px);margin-inline:auto}
+:focus-visible{outline:3px solid var(--zel);outline-offset:3px}
+.p-zel{background:var(--zel);color:#fff}
+.p-zel :focus-visible{outline-color:#fff}
+
+/* ================= hlavička a nadpis na zelenej ================= */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:84px}
+.logo{display:inline-flex;align-items:center;min-height:44px;font:600 31px/1 var(--disp);letter-spacing:-.035em;text-transform:lowercase;text-decoration:none}
+.spat{display:inline-flex;align-items:center;min-height:46px;padding:0 18px;border:2px solid #fff;border-radius:var(--r);font:600 16px/1.1 var(--text);text-decoration:none;white-space:nowrap;transition:background-color .15s,color .15s}
+.spat:hover{background:#fff;color:var(--zel)}
+.uvod{padding:clamp(24px,5vw,72px) 0 clamp(48px,6vw,88px)}
+h1{margin:0;font:500 clamp(46px,7vw,104px)/.96 var(--disp);letter-spacing:-.032em;text-wrap:balance}
+.sub{margin:clamp(20px,2.4vw,30px) 0 0;max-width:32em;font-size:clamp(19px,1.6vw,23px);line-height:1.42;text-wrap:pretty}
+
+/* ================= dokument: jeden stĺpec na čítanie ================= */
+.dok{padding-bottom:clamp(56px,8vw,112px)}
+.text{max-width:40em;padding-top:clamp(40px,5vw,72px);display:grid;gap:clamp(30px,3.4vw,40px)}
+.bod{padding-top:clamp(26px,3vw,34px);border-top:1px solid var(--ciara)}
+.bod:first-child{padding-top:0;border-top:0}
+.bod h2{margin:0 0 12px;font:500 clamp(25px,2.4vw,32px)/1.12 var(--disp);letter-spacing:-.02em;text-wrap:balance}
+.bod p,.bod ul{margin:0 0 14px;text-wrap:pretty}
+.bod>:last-child{margin-bottom:0}
+.bod ul{padding-left:1.15em}
+.bod li{padding-left:.25em}
+.bod li+li{margin-top:8px}
+.bod li::marker{color:var(--zel)}
+strong{font-weight:600}
+.bod strong{white-space:nowrap}
+.dok a{color:var(--zel);font-weight:600;text-decoration:underline;transition:color .15s}
+.dok a:hover{color:var(--zel-h);text-decoration-thickness:3px}
+
+/* jedna praktická rada na jemnej zelenej */
+.box{padding:clamp(20px,2.4vw,28px);background:var(--zel-j);border-radius:var(--r)}
+.box p{margin:0;text-wrap:pretty}
+.box p:first-child{margin-bottom:8px}
+.box p:first-child strong{font:500 clamp(22px,2vw,26px)/1.15 var(--disp);letter-spacing:-.018em}
+
+.date{margin:0;font-size:16px;color:var(--siv)}
+
+/* ================= pätička ================= */
+.foot{border-top:1px solid var(--ciara);color:var(--siv);font-size:16px}
+.foot__r{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 24px;padding-block:14px 22px}
+.foot span{padding-block:12px}
+.foot a{display:inline-flex;align-items:center;min-height:44px;color:var(--cie);transition:color .15s}
+.foot a:hover{color:var(--zel)}
+
+@media (max-width:599px){
+  body{font-size:17px}
+  .top{min-height:68px}
+  .logo{font-size:27px}
+  .spat{min-height:44px;padding:0 14px;font-size:15px}
+  .uvod{padding-top:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important}
+}
 </style>
 </head>
 <body>
 
-<header class="shell top">
-  <a class="brand" href="index.html"><i>R</i>Rutino</a>
-  <a class="back" href="index.html">Späť na stránku</a>
+<header class="p-zel">
+  <div class="wrap top">
+    <a class="logo" href="./">Rutino</a>
+    <a class="spat" href="./">Späť na stránku</a>
+  </div>
 </header>
 
-<main class="shell">
-  <h1>Ochrana údajov</h1>
-  <p class="sub">Krátko a bez právnickej hatmatilky: čo o vás a vašej firme dostanem, keď mi pošlete podklady, a čo s tým robím.</p>
-
-  <h2>Kto údaje spracúva</h2>
-  <p>Stránku rutino.online a toolky robím ja, <strong>Alex Poliak</strong>. Kontakt: <a href="mailto:info@rutino.online">info@rutino.online</a>.</p>
-
-  <h2>Aké údaje dostanem</h2>
-  <ul>
-    <li>Vaše meno, e-mail a telefón z mailu, ktorým mi napíšete.</li>
-    <li>Podklady, ktoré priložíte: starú cenovú ponuku, faktúru, cenník alebo tabuľku. Tie často obsahujú mená a adresy vašich zákazníkov alebo dodávateľov.</li>
-    <li>Údaje o platbe, ktoré vidím na bankovom výpise, keď zaplatíte prevodom.</li>
-  </ul>
-
-  <h2>Načo ich potrebujem</h2>
-  <p>Iba na to, aby som program ocenil, postavil presne na váš proces, dohodol s vami termín a poslal hotovú prácu s návodom. Podklady nikam ďalej neposielam a nepoužívam ich na nič iné.</p>
-
-  <h2>Kde údaje sú</h2>
-  <p>Vaša správa a prílohy ostávajú v mojej e-mailovej schránke (Hostinger) a počas práce v mojom počítači. Hotová toolka beží u vás. Ak si objednáte evidenciu pre viac ľudí, beží na serveri v EÚ, ku ktorému má prístup len vaša firma a ja pri opravách.</p>
-
-  <h2>Ako dlho ich mám</h2>
-  <p>Podklady a korešpondenciu držím, kým spolu pracujeme, a rozumný čas potom, keby ste chceli ďalší proces alebo úpravu. Doklady o platbe musím podľa zákona uchovať dlhšie. Keď mi napíšete, že mám vaše podklady vymazať, zmažem ich aj korešpondenciu.</p>
-
-  <h2>Ukážky na stránke</h2>
-  <p>Tri ukážkové toolky nič neukladajú, po obnovení stránky sa vrátia na začiatok. PDF, ktoré do ukážky hodíte, sa spracuje priamo vo vašom počítači a nikam sa neposiela.</p>
-
-  <h2>Cookies a meranie</h2>
-  <p>Stránka nepoužíva sledovacie cookies ani analytiku. Písma sú uložené priamo na stránke, takže sa pri načítaní nič nesťahuje od tretích strán.</p>
-
-  <h2>Čo môžete žiadať</h2>
-  <ul>
-    <li>Aby som vám povedal, aké údaje o vás mám.</li>
-    <li>Aby som ich opravil alebo vymazal.</li>
-    <li>Aby som ich prestal používať.</li>
-    <li>Podať sťažnosť na Úrad na ochranu osobných údajov Slovenskej republiky, ak si myslíte, že s tým zaobchádzam zle.</li>
-  </ul>
-  <p>Stačí mail na <a href="mailto:info@rutino.online">info@rutino.online</a> a ozvem sa do niekoľkých dní.</p>
-
-  <div class="box">
-    <p><strong>Podklady so zákazníkmi</strong></p>
-    <p>Ak mi pošlete starú ponuku alebo faktúru, mená vašich zákazníkov v nej môžete pokojne začierniť alebo prepísať na „zákazník A“. Na ocenenie ani stavbu programu ich nepotrebujem, stačí mi štruktúra dokumentu a čísla.</p>
+<main class="dok">
+  <div class="uvod p-zel">
+    <div class="wrap">
+      <h1>Ochrana údajov</h1>
+      <p class="sub">Krátko a bez právnickej hatmatilky: čo o vás a vašej firme dostanem, keď mi pošlete podklady, a čo s tým robím.</p>
+    </div>
   </div>
 
-  <p class="date">Naposledy upravené: september 2026</p>
+  <div class="wrap">
+  <div class="text">
+    <section class="bod">
+      <h2>Kto údaje spracúva</h2>
+      <p>Stránku rutino.online a programy robím ja, <strong>Alex Poliak</strong>. Kontakt: <a href="mailto:info@rutino.online">info@rutino.online</a>.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Aké údaje dostanem</h2>
+      <ul>
+        <li>Vaše meno, e-mail a ďalšie kontaktné údaje z podpisu mailu, ktorým mi napíšete.</li>
+        <li>Podklady, ktoré priložíte: starú cenovú ponuku, faktúru, cenník alebo tabuľku. Tie často obsahujú mená a adresy vašich zákazníkov alebo dodávateľov.</li>
+        <li>Údaje o platbe, ktoré vidím na bankovom výpise, keď zaplatíte prevodom.</li>
+      </ul>
+    </section>
+
+    <section class="bod">
+      <h2>Načo ich potrebujem</h2>
+      <p>Iba na to, aby som program ocenil, postavil presne na vašu robotu, dohodol s vami termín a poslal hotovú prácu s návodom. Podklady nikam ďalej neposielam a nepoužívam ich na nič iné.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Kde údaje sú</h2>
+      <p>Vaša správa a prílohy ostávajú v mojej e-mailovej schránke (Hostinger) a počas práce v mojom počítači. Hotový program beží u vás. Ak si objednáte Evidenciu namiesto Excelu, beží na serveri v EÚ, ku ktorému má prístup len vaša firma a ja pri opravách.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Ako dlho ich mám</h2>
+      <p>Podklady a korešpondenciu držím, kým spolu pracujeme, a rozumný čas potom, keby ste chceli ďalší program alebo úpravu. Doklady o platbe musím podľa zákona uchovať dlhšie. Keď mi napíšete, že mám vaše podklady vymazať, zmažem ich aj korešpondenciu.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Ukážky na stránke</h2>
+      <p>Tri ukážkové programy nič neukladajú, po obnovení stránky sa vrátia na začiatok. PDF, ktoré do ukážky hodíte, sa spracuje priamo vo vašom počítači a nikam sa neposiela.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Cookies a meranie</h2>
+      <p>Stránka nepoužíva sledovacie cookies ani analytiku. Písma sú uložené priamo na stránke, takže sa pri načítaní nič nesťahuje od tretích strán.</p>
+    </section>
+
+    <section class="bod">
+      <h2>Čo môžete žiadať</h2>
+      <ul>
+        <li>Aby som vám povedal, aké údaje o vás mám.</li>
+        <li>Aby som ich opravil alebo vymazal.</li>
+        <li>Aby som ich prestal používať.</li>
+        <li>Podať sťažnosť na Úrad na ochranu osobných údajov Slovenskej republiky, ak si myslíte, že s tým zaobchádzam zle.</li>
+      </ul>
+      <p>Stačí mail na <a href="mailto:info@rutino.online">info@rutino.online</a> a ozvem sa do niekoľkých dní.</p>
+    </section>
+
+    <aside class="box">
+      <p><strong>Podklady so zákazníkmi</strong></p>
+      <p>Ak mi pošlete starú ponuku alebo faktúru, mená vašich zákazníkov v nej môžete pokojne začierniť alebo prepísať na „zákazník A“. Na ocenenie ani stavbu programu ich nepotrebujem, stačí mi štruktúra dokumentu a čísla.</p>
+    </aside>
+
+    <p class="date">Naposledy upravené: október 2026</p>
+  </div>
+  </div>
 </main>
 
-<footer class="shell foot">
-  <span>Rutino · rutino.online</span>
-  <a href="index.html">Späť na stránku</a>
+<footer class="foot">
+  <div class="wrap foot__r">
+    <span>rutino.online</span>
+    <a href="./">Späť na stránku</a>
+  </div>
 </footer>
 
 </body>

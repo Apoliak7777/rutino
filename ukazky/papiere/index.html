@@ -4,153 +4,320 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Papiere do tabuľky: faktúry z PDF do Excelu (ukážka)</title>
-<meta name="description" content="Ukážková toolka: hodíte do nej PDF faktúry, ona z nich vytiahne dodávateľa, čísla, dátumy a sumy do tabuľky. Beží v prehliadači, súbory neopúšťajú váš počítač.">
+<meta name="description" content="Ukážka programu, ktorý z PDF faktúr vypíše dodávateľa, čísla, dátumy a sumy do tabuľky. Beží vo vašom prehliadači a súbory nikam neposiela.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F8F7F4">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23C2410C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-weight='600' font-size='36' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#93CDEE">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='3' fill='%2393CDEE'/%3E%3Ctext x='32' y='45' font-family='Arial,sans-serif' font-weight='700' font-size='40' text-anchor='middle' fill='%230A2E50'%3Er%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="../../fonts/funnel-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/funnel-sans-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/funnel-display-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fonts/funnel-display-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Newsreader';font-style:normal;font-weight:500;font-display:swap;src:url('../../fonts/newsreader-500-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('../../fonts/manrope-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+/* Písma sú na vlastnom serveri (SIL OFL 1.1, licencia vo fonts/OFL-funnel.txt), nič sa nenačítava z cudzej domény.
+   Funnel Display len na nadpisy a logo, Funnel Sans na všetko ostatné vrátane čísel v tabuľke. */
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-display-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Display";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-display-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-sans-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+2020,U+20A0-20AB,U+20AD-20C0,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Funnel Sans";font-style:normal;font-weight:300 800;font-display:swap;src:url("../../fonts/funnel-sans-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ---------- farby programu Papiere do tabuľky (STAVBA.md): plocha, text, jemná a biela ---------- */
 :root{
   color-scheme:light;
-  --bg:#F8F7F4; --surface:#FFFFFF; --surface-2:#EFEDE8;
-  --ink:#151517; --ink-2:#3A3A3E; --muted:#6E6E74;
-  --line:rgba(21,21,23,.13); --box-line:rgba(21,21,23,.08);
-  --acc:#C2410C; --acc-hover:#A33608; --acc-ink:#FFFFFF;
-  --acc-soft:rgba(194,65,12,.08); --acc-line:rgba(194,65,12,.35);
-  --ok:#1F7A4D; --ok-soft:rgba(31,122,77,.10); --hm:#8A5A00; --hm-soft:rgba(214,146,0,.14); --err:#B3261E; --err-soft:rgba(179,38,30,.10);
-  --shadow:0 1px 2px rgba(21,21,23,.06),0 20px 40px -28px rgba(21,21,23,.35);
-  --display:"Newsreader",Georgia,"Times New Roman",serif;
-  --body:"Manrope","Segoe UI",system-ui,sans-serif;
-  --r:6px;
+  --pl:#93CDEE;      /* nebeská plocha: hlavička, pás na konci, bunky na kontrolu */
+  --tx:#0A2E50;      /* tmavomodrý text: 13,8 : 1 na bielej, 8,0 : 1 na ploche */
+  --tx2:#2F4E6C;     /* menej dôležitý text: 8,7 : 1 na bielej, 7,6 : 1 na jemnej, 5,0 : 1 na ploche */
+  --jem:#E2F2FB;     /* jemná: hlavička a spodná lišta tabuľky, riadok pod myšou, zoznam na kontrolu */
+  --bie:#FFFFFF;
+  --ciara:#B7CFE0;   /* tenké linky medzi riadkami */
+  --pole:#6E8EAA;    /* okraj políčka: 3,4 : 1 na bielej, aby bolo políčko vidno */
+  --tx-hover:#1A4670;
+  --r:3px;           /* jedno zaoblenie na všetko */
+  --disp:"Funnel Display",Arial,sans-serif;
+  --text:"Funnel Sans",Arial,sans-serif;
+  --okraj:clamp(16px,2vw,40px);
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
+
+/* ---------- základ ---------- */
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
-button{font:inherit;color:inherit;cursor:pointer}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bie);color:var(--tx);font-family:var(--text);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{margin:0;font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing:-.012em}
+p{margin:0}
+b,strong{font-weight:650}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
 input{font:inherit;color:inherit}
-h1,h2,h3{font-family:var(--display);font-weight:500;margin:0;letter-spacing:-.01em}
-:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
-.top{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.top h1{font-size:1.25rem}
-.top .sub{color:var(--muted);font-size:.86rem}
-.top .spacer{flex:1}
-.back{font-size:.86rem;color:var(--ink-2);text-decoration:none;font-weight:600}
-.back:hover{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:.9rem;white-space:nowrap;text-decoration:none;transition:border-color .2s,background-color .2s}
-.btn:hover{border-color:var(--ink)}
-.btn--acc{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
-.btn--acc:hover{background:var(--acc-hover);border-color:transparent}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.wrap{max-width:1360px;margin-inline:auto;padding:20px}
-.drop{border:2px dashed var(--acc-line);border-radius:8px;background:var(--surface);padding:26px 20px;text-align:center;transition:background-color .2s,border-color .2s}
-.drop.is-over{background:var(--acc-soft);border-color:var(--acc)}
-.drop h2{font-size:1.35rem;margin-bottom:6px}
-.drop p{margin:0 0 14px;color:var(--ink-2)}
-.drop .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.stav{margin:14px 0 0;font-size:.9rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
-.stav b{color:var(--ink)}
-.legend{display:inline-flex;gap:12px;flex-wrap:wrap}
-.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-.legend .l-ok::before{background:var(--ok)} .legend .l-hm::before{background:var(--hm)} .legend .l-no::before{background:var(--err)}
-.pane{margin-top:16px;background:var(--surface);border:1px solid var(--box-line);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
-.scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:1480px}
-th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:1px solid var(--ink);white-space:nowrap;background:var(--surface);position:sticky;top:0}
-td{padding:4px 6px;border-bottom:1px solid var(--box-line);vertical-align:middle;font-size:.9rem}
-td.file{font-weight:600;white-space:nowrap;max-width:190px;overflow:hidden;text-overflow:ellipsis}
-td.file small{display:block;font-weight:500;color:var(--muted);font-size:.76rem}
-td input{width:100%;min-width:96px;}
-td:nth-child(2) input{min-width:230px}
-td:nth-child(4) input{min-width:130px}
-td:nth-child(5) input{min-width:120px}
-td:nth-child(12) input{min-width:215px}
-td input{padding:6px 8px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:.9rem}
-td input:hover{border-color:var(--line)}
-td input:focus{outline:none;border-color:var(--acc);background:var(--bg)}
-td.ok input{background:var(--ok-soft)} td.hm input{background:var(--hm-soft)} td.no input{background:var(--err-soft)}
-td.num input{text-align:right;font-variant-numeric:tabular-nums}
-td.x button{border:0;background:transparent;color:var(--muted);font-size:1.1rem;padding:2px 6px;border-radius:4px}
-td.x button:hover{color:var(--err);background:var(--surface-2)}
-.empty{padding:34px 16px;text-align:center;color:var(--muted)}
-.akcie{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-top:1px solid var(--line)}
-.akcie .hint{font-size:.84rem;color:var(--muted);flex-basis:100%}
-.pozn{margin-top:22px;padding:14px 16px;border-left:3px solid var(--acc);background:var(--acc-soft);font-size:.92rem;color:var(--ink-2);border-radius:0 var(--r) var(--r) 0}
-.pozn b{color:var(--ink)}
-.ukazka-lista{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:16px;padding:10px 14px;border-left:3px solid var(--acc);background:var(--acc-soft);border-radius:0 var(--r) var(--r) 0;font-size:.9rem;color:var(--ink-2)}
-.ukazka-lista b{color:var(--ink)}
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:var(--r);font-size:.9rem;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9}
+:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
+.wrap{max-width:1800px;margin-inline:auto;padding-inline:var(--okraj)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- tlačidlá ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border:1.5px solid var(--tx);border-radius:var(--r);
+  font-family:var(--text);font-weight:600;font-size:16px;line-height:1;text-decoration:none;white-space:nowrap;
+  transition:background-color .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .15s var(--ease)}
+.btn:active{transform:translateY(1px)}
+.btn--plne{background:var(--tx);color:var(--bie)}
+.btn--plne:hover{background:var(--tx-hover);border-color:var(--tx-hover)}
+.btn--ciara{background:transparent;color:var(--tx)}
+.btn--ciara:hover{background:var(--tx);color:var(--bie)}
+.btn--sm{min-height:44px;padding:0 16px;font-size:15px}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn--ciara:disabled:hover{background:transparent;color:var(--tx)}
+.btn--plne:disabled:hover{background:var(--tx);border-color:var(--tx)}
+label.btn{cursor:pointer}
+
+/* ================= HLAVIČKA UKÁŽKY: rovnaká vo všetkých troch ukážkach ================= */
+.uk-hlava{background:var(--pl);color:var(--tx)}
+.uk-lista{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;min-height:64px}
+.logo{display:inline-flex;align-items:center;min-height:44px;font:600 27px/1 var(--disp);letter-spacing:-.035em;color:var(--tx);text-decoration:none}
+.spat{display:inline-flex;align-items:center;min-height:44px;font-weight:600;font-size:16px;color:var(--tx);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:.22em;white-space:nowrap}
+.spat:hover{text-decoration-thickness:2.5px}
+.uk-obsah{padding-block:clamp(18px,2.4vw,30px) clamp(22px,2.6vw,32px)}
+.uk-hlava h1{font-size:clamp(36px,3.9vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+/* mäkčeň nad ľ by sa v nadpise dotýkal písmena k */
+.mk{margin-right:.04em}
+.uk-popis{margin-top:10px;max-width:52ch;font-size:clamp(17px,1.4vw,20px);line-height:1.4;text-wrap:pretty}
+.uk-ukazka{display:flex;flex-wrap:wrap;align-items:center;gap:14px 32px;margin-top:14px}
+.uk-ukazka p{flex:1 1 420px;max-width:68ch;font-size:16px;line-height:1.45;text-wrap:pretty}
+@media (max-width:600px){
+  .uk-lista{min-height:56px}
+  .uk-ukazka{margin-top:12px}
+  .uk-ukazka p{flex-basis:100%}
+}
+
+/* ================= VSTUP: faktúry v PDF ================= */
+.drop{display:grid;gap:18px 40px;align-items:center;margin-top:clamp(20px,2.4vw,32px);padding:clamp(18px,2.2vw,28px);background:var(--bie);
+  border:1.5px dashed var(--tx2);border-radius:var(--r);transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.drop.is-over{background:var(--pl);border-style:solid;border-color:var(--tx)}
+.drop h2{font-size:clamp(27px,2.5vw,36px);margin-bottom:8px}
+.drop__txt{max-width:60ch;color:var(--tx2);text-wrap:pretty}
+.drop__vzory{margin-top:10px;max-width:70ch;font-size:15px;color:var(--tx2);text-wrap:pretty}
+.drop__vzory a{color:var(--tx);font-weight:600;text-underline-offset:3px;text-decoration-thickness:1px}
+.drop__vzory a:hover{text-decoration-thickness:2px}
+.drop .row{display:flex;flex-wrap:wrap;gap:10px}
+.drop .row .btn{flex:1 1 auto}
+.row:has(#subory:focus-visible) label[for="subory"]{outline:3px solid var(--tx);outline-offset:2px}
+@media (min-width:640px){.drop .row .btn{flex:0 0 auto}}
+@media (min-width:1000px){.drop{grid-template-columns:minmax(0,1fr) auto}}
+
+/* ================= STAV A LEGENDA ================= */
+.stav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;margin:22px 0 12px;font-size:15px;color:var(--tx2)}
+.stav b{color:var(--tx);font-variant-numeric:tabular-nums}
+.legend{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px 22px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend span::before{content:"";flex:none;width:26px;height:18px;border-radius:var(--r)}
+.legend .l-ok::before{background:var(--bie);border:1px solid var(--pole)}
+.legend .l-hm::before{background:var(--pl)}
+.legend .l-no::before{background:var(--bie);border:1.5px dashed var(--tx2)}
+
+/* ================= TABUĽKA ================= */
+.pane{background:var(--bie);border:1.5px solid var(--tx);border-radius:var(--r);overflow:hidden}
+.pane__lista{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:14px 16px 12px;border-bottom:1.5px solid var(--tx)}
+.pane__lista h2{font-size:24px}
+.pane__lista p{font-size:15px;color:var(--tx2)}
+.scroll-ram{position:relative}
+/* kým tabuľka pokračuje doprava, pravý okraj má pás vo farbe programu */
+.scroll-ram::after{content:"";position:absolute;top:0;right:0;bottom:0;width:4px;background:var(--pl);pointer-events:none;opacity:0;transition:opacity .2s}
+.scroll-ram.je-viac::after{opacity:1}
+/* position: skrytý popis posledného stĺpca (.vh) ostane vnútri posúvanej tabuľky a nerozťahuje stránku */
+.scroll{position:relative;overflow-x:auto;overscroll-behavior-x:contain}
+/* pevné šírky stĺpcov: na 1440 px sa celá tabuľka zmestí, na užšej obrazovke sa posúva a prvý stĺpec ostáva */
+table{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;font-variant-numeric:tabular-nums}
+col.w-dodavatel{width:210px} col.w-ico{width:96px} col.w-icdph{width:124px} col.w-cislo{width:100px} col.w-vs{width:94px}
+col.w-vystavena,col.w-splatnost{width:98px} col.w-bez{width:84px} col.w-dph{width:76px} col.w-celkom{width:92px} col.w-iban{width:248px} col.w-x{width:48px}
+th{padding:11px 10px 10px;background:var(--jem);border-bottom:1.5px solid var(--tx);font-size:13.5px;font-weight:650;line-height:1.2;color:var(--tx);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+th.num{text-align:right}
+td{padding:4px 2px;border-bottom:1px solid var(--ciara);vertical-align:middle;background:var(--bie)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--jem)}
+/* prvý stĺpec (dodávateľ a pod ním súbor) ostáva na mieste, keď sa tabuľka posúva do strany */
+th:first-child,td.c-dodavatel{position:sticky;left:0;z-index:1;box-shadow:inset -1px 0 0 var(--ciara)}
+th:first-child{z-index:2;padding-left:16px}
+td.c-dodavatel{padding:6px 8px 6px 8px}
+.subor{display:block;padding:2px 9px 0;font-size:13px;font-weight:500;line-height:1.3;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subor small{display:block;margin-top:2px;font-size:13px;line-height:1.35;white-space:normal}
+td input{display:block;width:100%;min-width:0;padding:8px 8px;border:1.5px solid transparent;border-radius:var(--r);background:transparent;color:var(--tx);
+  font-family:var(--text);font-size:14.5px;font-weight:450;line-height:1.3;font-variant-numeric:tabular-nums;text-overflow:ellipsis}
+td.c-dodavatel input{font-size:15px;font-weight:600}
+td.num input{text-align:right}
+td.c-celkom input{font-weight:700}
+td.hm input{background:var(--pl);font-weight:600}
+td.no input{background:var(--bie);border:1.5px dashed var(--tx2)}
+td input::placeholder{color:var(--tx2);opacity:1}
+td.ok input:hover{border-color:var(--pole)}
+td input:focus{outline:2px solid var(--tx);outline-offset:-2px;background:var(--bie)}
+td.x{text-align:center}
+td.x button{display:inline-grid;place-items:center;width:44px;height:44px;border:0;border-radius:var(--r);background:transparent;color:var(--tx2);font-size:24px;line-height:1}
+td.x button:hover{background:var(--tx);color:var(--bie)}
+.empty{padding:44px 16px;text-align:center;font-size:15px;line-height:1.5;color:var(--tx2)}
+.empty[hidden]{display:none}
+.akcie{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;padding:12px 16px;border-top:1.5px solid var(--tx);background:var(--jem)}
+.akcie .hint{flex:1 1 320px;font-size:14.5px;line-height:1.45;color:var(--tx2);text-wrap:pretty}
+@media (max-width:699px){
+  .scroll{overflow:visible}
+  .scroll-ram::after{display:none}
+  table{display:block}
+  colgroup{display:none}
+  thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  tbody{display:block}
+  #rows tr{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 10px;padding:14px 12px 16px;border-bottom:1.5px solid var(--tx)}
+  #rows tr:last-child{border-bottom:0}
+  #rows td{display:block;padding:0;border:0;background:transparent;min-width:0;box-shadow:none}
+  #rows tr:hover td{background:transparent}
+  #rows td::before{content:attr(data-h);display:block;margin-bottom:3px;font-size:13px;font-weight:600;line-height:1.2;color:var(--tx2)}
+  /* z-index:auto: bunka mriežky so z-indexom by prekryla tlačidlo × v rohu */
+  #rows td.c-dodavatel{position:static;z-index:auto;grid-column:1/-1;padding:0 50px 0 0}
+  #rows td.c-celkom,#rows td.c-iban{grid-column:1/-1}
+  #rows .subor{padding:4px 0 0}
+  #rows td input{min-height:44px;border:1px solid var(--pole)}
+  #rows td.hm input{border-color:var(--tx2)}
+  #rows td.no input{border:1.5px dashed var(--tx2)}
+  #rows td.c-dodavatel input{font-size:17px}
+  #rows td.c-celkom input{font-size:20px;padding:10px}
+  #rows td.x{position:absolute;top:6px;right:4px;z-index:2;width:auto}
+  #rows td.x::before{display:none}
+}
+
+/* ================= ČO TREBA SKONTROLOVAŤ ================= */
+.kontrola{margin-top:14px;padding:16px 18px 18px;background:var(--jem);border-radius:var(--r)}
+.kontrola[hidden]{display:none}
+.kontrola h3{font-size:21px}
+.kontrola ul{margin:8px 0 0;padding-left:20px;max-width:96ch}
+.kontrola li{margin-top:6px;line-height:1.5;text-wrap:pretty}
+.kontrola li b{overflow-wrap:anywhere}
+
+/* ================= NA KONIEC: program pre vás ================= */
+.koniec{margin-top:clamp(40px,5vw,72px);background:var(--pl);color:var(--tx)}
+.koniec__in{padding-block:clamp(28px,4vw,56px)}
+.koniec h2{font-size:clamp(30px,3.4vw,48px);max-width:22ch}
+.koniec p{margin-top:14px;max-width:62ch;font-size:clamp(16px,1.3vw,18px);line-height:1.55;text-wrap:pretty}
+.koniec .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+
+/* ================= HLÁŠKA ================= */
+.toast{position:fixed;left:50%;bottom:20px;z-index:9;width:max-content;max-width:calc(100% - 32px);padding:12px 16px;background:var(--tx);color:var(--bie);border-radius:var(--r);
+  font-size:15px;font-weight:500;line-height:1.4;transform:translate(-50%,16px);opacity:0;transition:opacity .25s var(--ease),transform .25s var(--ease);pointer-events:none}
 .toast.is-on{opacity:1;transform:translate(-50%,0)}
-.vh{position:absolute;left:-9999px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
 
-<header class="top">
-  <div>
-    <h1>Papiere do tabuľky</h1>
-    <div class="sub">ukážková toolka: faktúry z PDF do jednej tabuľky</div>
+<header class="uk-hlava">
+  <div class="wrap uk-lista">
+    <a class="logo" href="../../" aria-label="Rutino, úvodná stránka">rutino</a>
+    <a class="spat" href="../../?co=faktury#p-faktury">Späť na rutino.online</a>
   </div>
-  <div class="spacer"></div>
-  <a class="back" href="../../#ukazky">Späť na rutino.online</a>
+  <div class="wrap uk-obsah">
+    <h1>Papiere do tabu<span class="mk">ľ</span>ky</h1>
+    <p class="uk-popis">Program prečíta faktúry v&nbsp;PDF a&nbsp;vypíše z&nbsp;nich do tabuľky dodávateľa, čísla, dátumy aj sumy. Čím si nie je istý, vyfarbí vám na kontrolu.</p>
+    <div class="uk-ukazka" role="note">
+      <p>Toto je ukážka pre vymyslený e-shop s&nbsp;čajom a&nbsp;kávou Lúčka s.&nbsp;r.&nbsp;o. Nič sa tu neukladá a&nbsp;vyskúšať si môžete aj dve vlastné faktúry.</p>
+      <a class="btn btn--plne" href="../../?co=faktury#kontakt">Napíšte mi</a>
+    </div>
+  </div>
 </header>
 
 <main class="wrap">
-  <div class="ukazka-lista"><span>Ukážka s tromi vymyslenými faktúrami a 2 vlastnými PDF na skúšku. <b>Vaša toolka číta faktúry bez limitu a exportuje ich do Excelu alebo na import do účtovníctva.</b></span><a class="btn btn--acc" href="mailto:info@rutino.online?subject=Program%20na%20mieru%3A%20Rutino">Napíšte mi</a></div>
   <div class="drop" id="drop">
-    <h2>Sem hoďte PDF faktúry</h2>
-    <p>Alebo si to najprv vyskúšajte na troch vymyslených faktúrach od troch rôznych dodávateľov.</p>
+    <div>
+      <h2>Pridajte faktúry v&nbsp;PDF</h2>
+      <p class="drop__txt">Pretiahnite ich sem alebo ich vyberte tlačidlom. Ak práve nemáte žiadnu po ruke, načítajte tri vzorové, ktoré e-shopu Lúčka poslali jeho dodávatelia.</p>
+      <p class="drop__vzory">Vzorové faktúry si môžete pozrieť aj v&nbsp;PDF: <a href="vzory/faktura-1.pdf" target="_blank" rel="noopener">Krabica a&nbsp;Páska</a> (obaly), <a href="vzory/faktura-2.pdf" target="_blank" rel="noopener">Kuriér&nbsp;Rýchlik</a> (doprava zásielok), <a href="vzory/faktura-3.pdf" target="_blank" rel="noopener">Pražiareň&nbsp;Zrnko</a> (káva).</p>
+    </div>
     <div class="row">
-      <button class="btn btn--acc" id="ukazka" type="button">Načítať 3 ukážkové faktúry</button>
-      <label class="btn" for="subory">Vybrať vlastné PDF</label>
+      <button class="btn btn--plne" id="ukazka" type="button">Načítať 3 vzorové faktúry</button>
+      <label class="btn btn--ciara" for="subory">Vybrať vlastné PDF</label>
       <input class="vh" id="subory" type="file" accept="application/pdf,.pdf" multiple>
     </div>
   </div>
 
   <div class="stav">
-    <span>Spracované: <b id="pocet">0</b> súborov za <b id="cas">0,0 s</b></span>
-    <span class="legend"><span class="l-ok">nájdené podľa označenia</span><span class="l-hm">odhad, skontrolujte</span><span class="l-no">chýba, doplňte</span></span>
+    <p>Spracované súbory: <b id="pocet">0</b>, čas <b id="cas">0,0&nbsp;s</b></p>
+    <p class="legend"><span class="l-ok">nájdené na faktúre</span><span class="l-hm">odhad, skontrolujte</span><span class="l-no">chýba, doplňte</span></p>
   </div>
 
-  <section class="pane" aria-label="Vytiahnuté údaje">
-    <div class="scroll">
+  <section class="pane" aria-labelledby="h-udaje">
+    <div class="pane__lista"><h2 id="h-udaje">Údaje z faktúr</h2><p>Každú bunku môžete prepísať.</p></div>
+    <div class="scroll-ram"><div class="scroll">
       <table>
+        <colgroup><col class="w-dodavatel"><col class="w-ico"><col class="w-icdph"><col class="w-cislo"><col class="w-vs"><col class="w-vystavena"><col class="w-splatnost"><col class="w-bez"><col class="w-dph"><col class="w-celkom"><col class="w-iban"><col class="w-x"></colgroup>
         <thead><tr>
-          <th>Súbor</th><th>Dodávateľ</th><th>IČO</th><th>IČ DPH</th><th>Číslo faktúry</th><th>Var. symbol</th><th>Vystavená</th><th>Splatnosť</th><th>Bez DPH</th><th>DPH</th><th>Celkom</th><th>IBAN</th><th></th>
+          <th>Dodávateľ</th><th>IČO</th><th>IČ DPH</th><th>Číslo faktúry</th><th>Var. symbol</th><th>Vystavená</th><th>Splatnosť</th><th class="num">Bez DPH</th><th class="num">DPH</th><th class="num">Celkom</th><th>IBAN</th><th><span class="vh">Odstrániť</span></th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table>
-      <div class="empty" id="empty">Zatiaľ prázdne. Každý súbor sa spracuje priamo vo vašom prehliadači, nikam sa neposiela.</div>
-    </div>
+      <div class="empty" id="empty">Tabuľka je zatiaľ prázdna. Faktúry sa čítajú priamo vo vašom prehliadači a&nbsp;nikam sa neposielajú.</div>
+    </div></div>
     <div class="akcie">
-      <button class="btn" id="vymaz" type="button" disabled>Vymazať tabuľku</button>
-      <span class="hint">Export do CSV, kopírovanie do Excelu a import do účtovníctva sú v plnej toolke. Bunky sa dajú prepísať priamo v tabuľke.</span>
+      <button class="btn btn--ciara btn--sm" id="vymaz" type="button" disabled>Vymazať tabuľku</button>
+      <span class="hint">Ukážka tabuľku neukladá, to bude vedieť až váš program.</span>
     </div>
   </section>
 
-  <div class="pozn"><b>Čo pribudne v toolke na mieru:</b> čítanie skenov cez OCR, sledovanie priečinka, do ktorého faktúry ukladáte, a výstup v takom CSV alebo XML, aké vaše účtovníctvo vie naimportovať. Formát si dohodneme pri ukážke.</div>
+  <section class="kontrola" id="kontrola" aria-labelledby="h-kontrola" aria-live="polite" hidden>
+    <h3 id="h-kontrola">Na kontrolu</h3>
+    <ul id="kontrola-zoznam"></ul>
+  </section>
 </main>
+
+<footer class="koniec" aria-labelledby="h-koniec">
+  <div class="wrap koniec__in">
+    <h2 id="h-koniec">Program na vaše faktúry</h2>
+    <p>Bude čítať faktúry, dodacie listy alebo objednávky od vašich dodávateľov, koľko ich len príde. Tabuľku uloží do CSV pre Excel alebo do súboru na import do účtovníctva, formát dohodneme pred začiatkom. Beží vo Windows a&nbsp;súbory z&nbsp;počítača nikam neodchádzajú.</p>
+    <p>Stojí 690&nbsp;€. Polovicu zaplatíte pri objednávke a&nbsp;druhú až pri odovzdaní, potom už neplatíte nič, ani mesačne.</p>
+    <div class="row">
+      <a class="btn btn--plne" href="../../?co=faktury#kontakt">Napíšte mi</a>
+      <a class="btn btn--ciara" href="../../?co=faktury#p-faktury">Späť na rutino.online</a>
+    </div>
+  </div>
+</footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<noscript><p class="wrap" style="padding-block:16px">Ukážka potrebuje zapnutý JavaScript.</p></noscript>
+
+<script>
+/* pás na pravom okraji, kým tabuľka pokračuje do strany */
+(function(){
+  var s = document.querySelector(".scroll"), ram = s.parentElement;
+  function hrana(){ ram.classList.toggle("je-viac", s.scrollLeft + s.clientWidth < s.scrollWidth - 2); }
+  s.addEventListener("scroll", hrana, {passive:true});
+  window.addEventListener("resize", hrana);
+  if (window.ResizeObserver) new ResizeObserver(hrana).observe(s.querySelector("table"));
+  hrana();
+})();
+</script>
+
 <script type="module">
-import * as pdfjsLib from "./pdfjs/pdf.min.mjs";
-pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdfjs/pdf.worker.min.mjs";
+let pdfjsLib = null;
+async function pdfjs(){
+  if (!pdfjsLib){ pdfjsLib = await import("./pdfjs/pdf.min.mjs"); pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdfjs/pdf.worker.min.mjs"; }
+  return pdfjsLib;
+}
 
 const $ = (id) => document.getElementById(id);
 const STLPCE = ["dodavatel","ico","icdph","cislo","vs","vystavena","splatnost","bez","dph","celkom","iban"];
-const HLAVICKA = ["Súbor","Dodávateľ","IČO","IČ DPH","Číslo faktúry","Variabilný symbol","Vystavená","Splatnosť","Bez DPH","DPH","Celkom","IBAN","Stav kontroly"];
+const HLAVICKA = ["Súbor","Dodávateľ","IČO","IČ DPH","Číslo faktúry","Variabilný symbol","Vystavená","Splatnosť","Bez DPH","DPH","Celkom","IBAN"];
+const SUMY = ["bez","dph","celkom"];
+const V_VETE = {dodavatel:"dodávateľa", ico:"IČO", icdph:"IČ DPH", cislo:"číslo faktúry", vs:"variabilný symbol", vystavena:"dátum vystavenia", splatnost:"splatnosť", bez:"sumu bez DPH", dph:"DPH", celkom:"celkovú sumu", iban:"IBAN"};
+const VZORY = ["faktura-1.pdf","faktura-2.pdf","faktura-3.pdf"];
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let riadky = [];
 
-/* ---------- text z PDF: položky zoskupíme do riadkov podľa výšky ---------- */
+/* ---------- text z PDF: položky zoskupíme do riadkov podľa výšky, pozícia x ostáva pre stĺpce ---------- */
 async function textZPdf(data){
-  const pdf = await pdfjsLib.getDocument({data}).promise;
+  const lib = await pdfjs();
+  const pdf = await lib.getDocument({data}).promise;
   const lines = [];
   for (let p = 1; p <= Math.min(pdf.numPages, 3); p++){
     const page = await pdf.getPage(p);
     const tc = await page.getTextContent();
-    const items = tc.items.filter(i => i.str && i.str.trim()).map(i => ({x:i.transform[4], y:Math.round(i.transform[5]), s:i.str}));
+    const items = tc.items.filter(i => i.str && i.str.trim()).map(i => ({x:i.transform[4], y:Math.round(i.transform[5]), s:i.str.trim()}));
     items.sort((a,b) => b.y - a.y || a.x - b.x);
     let cur = null;
     for (const it of items){
@@ -158,115 +325,196 @@ async function textZPdf(data){
       cur.parts.push(it);
     }
   }
-  return lines.map(l => l.parts.sort((a,b)=>a.x-b.x).map(p=>p.s).join(" ").replace(/\s{2,}/g," ").trim()).filter(Boolean);
+  for (const l of lines){ l.parts.sort((a,b) => a.x - b.x); l.text = l.parts.map(p => p.s).join(" ").replace(/\s{2,}/g," ").trim(); }
+  return lines.filter(l => l.text);
+}
+
+/* ---------- blok pod označením (Dodávateľ, Odberateľ): riadky v tom istom stĺpci, kým nepríde medzera alebo iné označenie ---------- */
+const ZNACKA = /^(dod[aá]vate[ľl]|odberate[ľl]|pr[íi]jemca|kupuj[úu]ci|popis|polo[žz]ka)/i;
+function blok(lines, re){
+  for (let i = 0; i < lines.length; i++){
+    const l = lines[i];
+    const k = l.parts.findIndex(p => re.test(p.s));
+    if (k < 0) continue;
+    const lab = l.parts[k];
+    const out = [];
+    const zvysok = lab.s.replace(re, "").replace(/^\s*:?\s*/, "").trim();
+    if (zvysok) out.push(zvysok);
+    const dalsi = l.parts.slice(k + 1).find(p => p.x > lab.x + 40);
+    const od = lab.x - 12, po = dalsi ? dalsi.x - 4 : Infinity;
+    let posledneY = l.y;
+    for (let j = i + 1; j < lines.length && out.length < 8; j++){
+      const t = lines[j].parts.filter(p => p.x >= od && p.x < po).map(p => p.s).join(" ").replace(/\s{2,}/g," ").trim();
+      if (!t) continue;
+      if (posledneY - lines[j].y > 30 || ZNACKA.test(t)) break;
+      out.push(t); posledneY = lines[j].y;
+    }
+    return out;
+  }
+  return null;
 }
 
 /* ---------- vytiahnutie polí ---------- */
+const SUMA = "((?:\\d{1,3}\\s)*\\d{1,3},\\d{2})";
 const num = (s) => s ? s.replace(/\s/g,"").replace(/€/g,"").trim() : "";
-const datum = (s) => s ? s.replace(/\s/g,"") : "";
+const cislo = (s) => parseFloat(String(s).replace(/\s/g,"").replace(",", "."));
+function datum(s){
+  if (!s) return "";
+  const m = s.replace(/\s/g,"").match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  return m ? m[1].padStart(2,"0") + "." + m[2].padStart(2,"0") + "." + m[3] : s.replace(/\s/g,"");
+}
 function hladaj(text, vzory){
   for (const re of vzory){ const m = text.match(re); if (m) return m[1].trim(); }
   return "";
 }
+/* prvá zhoda, ktorá nepatrí odberateľovi (IČO a IČ DPH odberateľa sú na faktúre tiež) */
+function prvaCudzia(text, re, odberatel){
+  const g = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
+  for (const m of text.matchAll(g)){ const v = m[1].replace(/\s/g,""); if (!odberatel.includes(v)) return v; }
+  return "";
+}
 function vytiahni(lines){
-  const text = lines.join("\n");
-  const r = {}; const st = {};
+  const text = lines.map(l => l.text).join("\n");
+  const r = {}, st = {}, dovody = {};
   const set = (k, v, s) => { r[k] = v || ""; st[k] = v ? s : "no"; };
 
-  // dodávateľ: riadok po označení Dodávateľ, inak prvý riadok s právnou formou, inak prvý riadok
-  let dod = "", dodSt = "hm";
-  const idx = lines.findIndex(l => /^dod[aá]vate[ľl]/i.test(l));
-  if (idx > -1){
-    const rest = lines[idx].replace(/^dod[aá]vate[ľl]\s*:?\s*/i,"").replace(/odberate[ľl].*$/i,"").trim();
-    dod = rest || (lines[idx+1] || "").replace(/odberate[ľl].*$/i,"").trim(); dodSt = "ok";
+  const dodBlok = blok(lines, /^dod[aá]vate[ľl]/i);
+  const odbBlok = blok(lines, /^(odberate[ľl]|pr[íi]jemca|kupuj[úu]ci)/i);
+  const odb = (odbBlok || []).join(" ").replace(/\s/g,"");
+  const dodText = (dodBlok || []).join("\n");
+
+  // dodávateľ: prvý riadok pod označením Dodávateľ, inak prvý riadok s právnou formou (to je len odhad)
+  let dod = dodBlok && dodBlok[0] ? dodBlok[0] : "", dodSt = "ok";
+  if (!dod){
+    const f = lines.find(l => /(s\.\s?r\.\s?o\.|spol\.\s?s\s?r\.\s?o\.|a\.\s?s\.|s\.r\.o)/i.test(l.text) && !odb.includes(l.text.replace(/\s/g,"")));
+    dod = f ? f.text : (lines[0] ? lines[0].text : ""); dodSt = "hm";
+    if (dod) dovody.dodavatel = "Dodávateľa program nenašiel pod označením, vzal prvý názov firmy na faktúre.";
   }
-  if (!dod){ const f = lines.find(l => /(s\.\s?r\.\s?o\.|spol\.\s?s\s?r\.\s?o\.|a\.\s?s\.|živnos|s\.r\.o)/i.test(l)); dod = f || lines[0] || ""; dodSt = "hm"; }
   set("dodavatel", dod.replace(/\s*[·|].*$/,"").trim(), dodSt);
 
-  set("ico", hladaj(text, [/I[ČC]O\s*:?\s*(\d{2}\s?\d{3}\s?\d{3})/i]).replace(/\s/g,""), "ok");
-  set("icdph", hladaj(text, [/I[ČC]\s?DPH\s*:?\s*(SK\s?\d{10})/i, /(SK\d{10})/]).replace(/\s/g,""), "ok");
+  const RE_ICO = /I[ČC]O\s*:?\s*(\d{2}\s?\d{3}\s?\d{3})\b/i;
+  const RE_ICDPH = /I[ČC]\s?DPH\s*:?\s*(SK\s?\d{10})/i;
+  set("ico", hladaj(dodText, [RE_ICO]).replace(/\s/g,"") || prvaCudzia(text, RE_ICO, odb), "ok");
+  set("icdph", hladaj(dodText, [RE_ICDPH]).replace(/\s/g,"") || prvaCudzia(text, RE_ICDPH, odb), "ok");
   set("cislo", hladaj(text, [/(?:fakt[úu]ra|invoice)\s*(?:[čc]\.|[čc][íi]slo|no\.?|#)\s*:?\s*([A-Z0-9][A-Z0-9\/\-]{2,})/i, /[čc][íi]slo fakt[úu]ry\s*:?\s*([A-Z0-9][A-Z0-9\/\-]{2,})/i]), "ok");
   set("vs", hladaj(text, [/variabiln[ýy]\s+symbol\s*:?\s*(\d{4,10})/i, /\bVS\s*:?\s*(\d{4,10})/]), "ok");
   set("vystavena", datum(hladaj(text, [/(?:d[áa]tum\s+vystavenia|vystaven[éáa])\s*:?\s*(\d{1,2}\.\s?\d{1,2}\.\s?\d{4})/i])), "ok");
   set("splatnost", datum(hladaj(text, [/(?:d[áa]tum\s+splatnosti|splatnos[ťt]|splatn[éáa])\s*:?\s*(\d{1,2}\.\s?\d{1,2}\.\s?\d{4})/i])), "ok");
-  set("bez", num(hladaj(text, [/(?:z[áa]klad(?:\s+DPH)?|spolu\s+bez\s+DPH|bez\s+DPH|cena\s+bez\s+DPH)\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
-  set("dph", num(hladaj(text, [/DPH\s*\d{1,2}\s*%\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
-  set("celkom", num(hladaj(text, [/(?:celkom\s+k\s+[úu]hrade|celkov[áa]\s+suma\s+k\s+[úu]hrade|suma\s+k\s+[úu]hrade|k\s+[úu]hrade|celkom\s+s\s+DPH|spolu\s+s\s+DPH|celkov[áa]\s+suma)\s*:?\s*((?:\d{1,3}\s)*\d{1,3},\d{2})/i])), "ok");
+  set("bez", num(hladaj(text, [new RegExp("(?:z[áa]klad(?:\\s+dane|\\s+DPH)?|spolu\\s+bez\\s+DPH|cena\\s+bez\\s+DPH|bez\\s+DPH)\\s*:?\\s*" + SUMA, "i")])), "ok");
+  set("dph", num(hladaj(text, [new RegExp("DPH\\s*\\d{1,2}\\s*%\\s*:?\\s*" + SUMA, "i")])), "ok");
+  set("celkom", num(hladaj(text, [new RegExp("(?:celkom\\s+k\\s+[úu]hrade|celkov[áa]\\s+suma\\s+k\\s+[úu]hrade|suma\\s+k\\s+[úu]hrade|k\\s+[úu]hrade|celkom\\s+s\\s+DPH|spolu\\s+s\\s+DPH|celkov[áa]\\s+suma)\\s*:?\\s*" + SUMA, "i")])), "ok");
   set("iban", hladaj(text, [/(SK\d{2}(?:\s?\d{4}){5})/]).replace(/\s/g,"").replace(/(.{4})/g,"$1 ").trim(), "ok");
 
-  // neplatca DPH: bez DPH = celkom, DPH = 0, to je odhad
-  if (!r.bez && r.celkom && /nie\s+som\s+platite/i.test(text)){ r.bez = r.celkom; st.bez = "hm"; r.dph = "0,00"; st.dph = "hm"; }
-  // dodávateľ bez IČ DPH je v poriadku, keď je neplatca
-  if (!r.icdph && /nie\s+som\s+platite/i.test(text)){ r.icdph = "neplatca"; st.icdph = "hm"; }
-  return {r, st};
+  // neplatiteľ DPH: faktúra má len celkovú sumu, sumu bez DPH a DPH program doplní a nechá na kontrolu
+  const neplatca = /nie\s+(?:som|sme|je)\s+(?:platite[ľl]|platc)/i.test(text);
+  if (neplatca && !r.icdph){ r.icdph = "neplatiteľ"; st.icdph = "ok"; }
+  if (neplatca && !r.bez && r.celkom){
+    r.bez = r.celkom; st.bez = "hm"; r.dph = "0,00"; st.dph = "hm";
+    dovody.bez = dovody.dph = "Dodávateľ nie je platiteľ DPH a\u00a0na faktúre je len celková suma. Sumu bez DPH a\u00a0DPH program doplnil sám, skontrolujte ich.";
+  }
+  // súčet musí sedieť
+  if (st.bez === "ok" && st.dph === "ok" && st.celkom === "ok" && Math.abs(cislo(r.bez) + cislo(r.dph) - cislo(r.celkom)) > 0.011){
+    st.celkom = "hm"; dovody.celkom = "Suma bez DPH a\u00a0DPH spolu nedávajú celkovú sumu, jedno z\u00a0čísel je zle.";
+  }
+  return {r, st, dovody};
 }
 
 /* ---------- spracovanie súborov ---------- */
-async function spracuj(subory){
+async function spracuj(subory, vzor){
   const t0 = performance.now();
   for (const f of subory){
-    let lines = [];
-    try { lines = await textZPdf(await f.arrayBuffer()); } catch(e){ lines = []; }
-    const {r, st} = lines.length ? vytiahni(lines) : {r:{}, st:{}};
-    riadky.push({subor:f.name, r, st, bezTextu: !lines.length});
+    let lines = [], chyba = "";
+    try { lines = await textZPdf(await f.arrayBuffer()); if (!lines.length) chyba = "PDF je len obrázok bez textu, napríklad sken. Taký súbor ukážka neprečíta."; }
+    catch(e){ chyba = "Súbor sa nepodarilo otvoriť ako PDF."; }
+    const {r, st, dovody} = lines.length ? vytiahni(lines) : {r:{}, st:{}, dovody:{}};
+    riadky.push({subor:f.name, vzor:!!vzor, r, st, dovody, chyba});
   }
-  $("cas").textContent = ((performance.now()-t0)/1000).toFixed(1).replace(".",",") + " s";
+  $("cas").textContent = ((performance.now() - t0) / 1000).toFixed(1).replace(".", ",") + "\u00a0s";
   kresli();
+  const tab = document.querySelector("section.pane");
+  if (tab.getBoundingClientRect().top > innerHeight * .55){
+    const klud = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    tab.scrollIntoView({block:"start", behavior: klud ? "auto" : "smooth"});
+  }
 }
+function trieda(k, s){ return "c-" + k + " " + (s || "no") + (SUMY.includes(k) ? " num" : ""); }
 function kresli(){
-  const tb = $("rows"); let html = "";
+  let html = "";
   riadky.forEach((row, i) => {
-    html += `<tr><td class="file" title="${row.subor}">${row.subor}${row.bezTextu ? '<small>bez textovej vrstvy, sken potrebuje OCR</small>' : ''}</td>`;
-    STLPCE.forEach(k => {
-      const s = row.st[k] || "no", v = row.r[k] || "";
-      const numc = ["bez","dph","celkom"].includes(k) ? " num" : "";
-      html += `<td class="${s}${numc}"><input value="${v.replace(/"/g,"&quot;")}" data-i="${i}" data-k="${k}" aria-label="${k}"></td>`;
+    const sub = esc(row.subor);
+    html += "<tr>";
+    STLPCE.forEach((k, j) => {
+      const h = HLAVICKA[j + 1], v = row.r[k] || "";
+      html += `<td class="${trieda(k, row.st[k])}" data-h="${h}"><input value="${esc(v)}" placeholder="doplňte" data-i="${i}" data-k="${k}" aria-label="${h}, ${sub}">`;
+      if (k === "dodavatel") html += `<span class="subor" title="${sub}">${sub}${row.chyba ? "<small>" + esc(row.chyba) + "</small>" : ""}</span>`;
+      html += "</td>";
     });
-    html += `<td class="x"><button type="button" data-x="${i}" aria-label="Odstrániť riadok">×</button></td></tr>`;
+    html += `<td class="x"><button type="button" data-x="${i}" aria-label="Odstrániť riadok ${sub}">×</button></td></tr>`;
   });
-  tb.innerHTML = html;
+  $("rows").innerHTML = html;
   $("empty").hidden = riadky.length > 0;
   $("pocet").textContent = riadky.length;
   $("vymaz").disabled = !riadky.length;
+  kresliKontrolu();
+}
+/* zoznam pod tabuľkou: pri ktorom súbore program niečo odhadol alebo nenašiel */
+function kresliKontrolu(){
+  const li = [];
+  riadky.forEach((row) => {
+    const veta = [];
+    if (row.chyba) veta.push(row.chyba);
+    else {
+      veta.push(...new Set(STLPCE.filter(k => row.st[k] === "hm" && row.dovody[k]).map(k => row.dovody[k])));
+      const chyba = STLPCE.filter(k => row.st[k] === "no").map(k => V_VETE[k]);
+      if (chyba.length) veta.push("Na faktúre program nenašiel: " + chyba.join(", ") + ". Prázdne bunky doplňte ručne.");
+    }
+    if (veta.length) li.push(`<li><b>${esc(row.subor)}</b>${row.r.dodavatel ? " (" + esc(row.r.dodavatel) + ")" : ""}: ${veta.join(" ")}</li>`);
+  });
+  $("kontrola-zoznam").innerHTML = li.join("");
+  $("kontrola").hidden = !li.length;
 }
 $("rows").addEventListener("input", (e) => {
   const i = e.target.closest("[data-i]"); if (!i) return;
-  const row = riadky[+i.dataset.i]; row.r[i.dataset.k] = i.value; row.st[i.dataset.k] = i.value ? "ok" : "no";
-  i.parentElement.className = (i.value ? "ok" : "no") + (["bez","dph","celkom"].includes(i.dataset.k) ? " num" : "");
+  const row = riadky[+i.dataset.i], k = i.dataset.k;
+  row.r[k] = i.value; row.st[k] = i.value ? "ok" : "no";
+  i.parentElement.className = trieda(k, row.st[k]);
+  kresliKontrolu();
 });
-$("rows").addEventListener("click", (e) => { const b = e.target.closest("[data-x]"); if (!b) return; riadky.splice(+b.dataset.x,1); kresli(); });
+$("rows").addEventListener("click", (e) => { const b = e.target.closest("[data-x]"); if (!b) return; riadky.splice(+b.dataset.x, 1); kresli(); });
 
 /* ---------- vstupy ---------- */
 let vlastne = 0;
 function vlastneSubory(fs){
   const volne = Math.max(0, 2 - vlastne);
-  if (!volne){ toast("V ukážke sa dajú vyskúšať 2 vlastné súbory, plná toolka nemá limit"); return; }
+  if (!volne){ toast("V\u00a0ukážke si môžete vyskúšať dve vlastné faktúry. Váš program limit mať nebude."); return; }
   const vyber = fs.slice(0, volne); vlastne += vyber.length;
-  if (fs.length > vyber.length) toast("V ukážke sa dajú vyskúšať 2 vlastné súbory, spracoval som prvé " + vyber.length);
-  spracuj(vyber);
+  if (fs.length > vyber.length) toast("V\u00a0ukážke idú len dve vlastné faktúry, " + (vyber.length === 1 ? "spracovala sa prvá." : "spracovali sa prvé dve."));
+  spracuj(vyber, false);
 }
 $("subory").addEventListener("change", (e) => { vlastneSubory([...e.target.files]); e.target.value = ""; });
 const drop = $("drop");
 ["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("is-over"); }));
 ["dragleave","drop"].forEach(ev => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("is-over"); }));
-drop.addEventListener("drop", (e) => { const fs = [...e.dataTransfer.files].filter(f => /\.pdf$/i.test(f.name)); if (fs.length) vlastneSubory(fs); else toast("Toolka číta PDF súbory"); });
+drop.addEventListener("drop", (e) => { const fs = [...e.dataTransfer.files].filter(f => /\.pdf$/i.test(f.name)); if (fs.length) vlastneSubory(fs); else toast("Program číta len súbory PDF."); });
 $("ukazka").addEventListener("click", async () => {
+  const chybaju = VZORY.filter(n => !riadky.some(r => r.vzor && r.subor === n));
+  if (!chybaju.length){ toast("Všetky tri vzorové faktúry už sú v tabuľke."); return; }
   $("ukazka").disabled = true;
   try {
     const fs = [];
-    for (const n of ["faktura-1.pdf","faktura-2.pdf","faktura-3.pdf"]){
+    for (const n of chybaju){
       const res = await fetch("vzory/" + n); if (!res.ok) throw new Error(n);
       fs.push(new File([await res.blob()], n, {type:"application/pdf"}));
     }
-    await spracuj(fs);
-  } catch(e){ toast("Ukážkové faktúry sa nepodarilo načítať"); }
+    await spracuj(fs, true);
+  } catch(e){ toast("Vzorové faktúry sa nepodarilo načítať. Skúste obnoviť stránku."); }
   $("ukazka").disabled = false;
 });
 
 /* ---------- výstupy ---------- */
 $("vymaz").addEventListener("click", () => { riadky = []; kresli(); });
 
-let tt; function toast(m){ const t = $("toast"); t.textContent = m; t.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("is-on"), 2200); }
+let tt; function toast(m){ const t = $("toast"); t.textContent = m; t.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("is-on"), 3200); }
 kresli();
 </script>
 </body>
