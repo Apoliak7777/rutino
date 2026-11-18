@@ -106,7 +106,7 @@ vo farbe programu s písmenom.
   (1 až 2, 3 až 9, 10 až 24) a ako často to robia, prípadne dopíše vetu. Stránka z toho poskladá predmet aj text
   s náhľadom. Odoslať ho dá cez `mailto:` (Otvoriť v e-maile), cez Gmail (`mail.google.com/mail/?view=cm`, len odkaz
   s `target=_blank`, žiadny skript) alebo si text skopíruje (Kopírovať text), lebo `mailto:` ľuďom s poštou
-  v prehliadači nič neotvorí. Pod tým je adresa efaktury@apoliak.sk s tlačidlom Kopírovať adresu. Tlačidlá
+  v prehliadači nič neotvorí. Pod tým je adresa info@apoliak.sk s tlačidlom Kopírovať adresu. Tlačidlá
   „Napíšte mi o …“ pri programoch, klik na pás aj odkazy z ukážok (`?co=ponuky`, `?co=faktury`, `?co=zakazky`)
   predvyplnia program; „Poslať mi tieto čísla“ vloží do mailu čísla z kalkulačky. Keby bol odkaz `mailto:` dlhší
   ako asi 1 900 znakov, ostanú z kalkulačky v mailu len výsledky. Bez JavaScriptu sú voľby skryté a ostane hotový
@@ -126,7 +126,7 @@ vo farbe programu s písmenom.
 
 ## Kontaktná adresa
 
-Všetky `mailto:` odkazy stránky vedú na `efaktury@apoliak.sk` (schránka na Hostingeri od 14.09.2026). Tlačidlá
+Všetky `mailto:` odkazy stránky vedú na `info@apoliak.sk` (schránka na Hostingeri od 14.09.2026). Tlačidlá
 „Napíšte mi“ v ukážkach vedú na `../../?co=…#kontakt`, na 404 na `/#kontakt`. Výnimkou je tlačidlo Otvoriť mail
 zákazníkovi v ukážke Ponukovača, ktoré ide na adresu zákazníka vyplnenú v ukážke (predvolená novak@example.com).
 
